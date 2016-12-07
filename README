@@ -1,0 +1,20 @@
+                Alex's Java Console App
+                   HelloSign Test
+
+Purpose:
+
+    I created this app because one of our customers was having an issue with
+    authentication on AWS using Java 1.8. With 1.7, he could get his app to 
+    perfectly fine, but 1.8 kept failing with some strange authentication
+    issues.
+    
+    After creating this app, uploading it to an AWS instance, and running it
+    successfully, I sent him the app so he could see for himself. This app
+    helped us show that it wasn't our SDK or the Java version specifically
+    that was causing the issue, but rather his certificates.
+
+    Now we can use this app for experimenting with Java and HelloSign's SDK,
+    and for testing customer snippets in Java.
+
+Questions?
+    Feel free to email me at radhack24@gmail.com
