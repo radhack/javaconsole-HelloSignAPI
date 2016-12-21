@@ -244,6 +244,10 @@ public class HStest {
                 // CostAlso.setValue("$30,000");
                 // CostAlso.setName("Cost Also");
                 request.setSigner("Role1", "george@example.com", "George");
+                request.setSigner("Role2", "bob@bobl.com", "Bob");
+                request.setSigner("Role3", "frank@frank.com", "Frank");
+                request.setSigner("Role4", "bobsson@bob.com", "BobsSon");
+                request.setSigner("Role5", "dkslf@dsflk.com", "lksjfl");
                 request.addCustomField(Cost);
                 // request.addCustomField(CostAlso);
                 request.setTestMode(true);
