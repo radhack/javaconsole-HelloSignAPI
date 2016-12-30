@@ -44,6 +44,7 @@ public class HStest {
                     + "6 for embedded requesting with template for embedded signing\n"
                     + "7 for embedded requesting for NON embedded signing\n"
                     + "8 for embedded signing with template\n"
+                    + "9 for nonembedded signing with template\n"
                     + "or 0 to exit: ");
             BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
             String things = bufferRead.readLine();
@@ -234,7 +235,7 @@ public class HStest {
                 request.setTemplateId("5f15711bf170531c5336528a1a4cbad2bd10da41");
                 request.setSubject("Purchase Order");
                 request.setMessage("Glad we could come to an agreement.");
-                //String role = "Role1";
+
                 CustomField Cost = new CustomField();
                 Cost.setEditor("Role1");
                 Cost.setIsRequired(Boolean.TRUE);
@@ -243,25 +244,57 @@ public class HStest {
                 // CustomField CostAlso = new CustomField();
                 // CostAlso.setValue("$30,000");
                 // CostAlso.setName("Cost Also");
-                request.setSigner("Role1", "george@example.com", "George");
-                request.setSigner("Role2", "bob@bobl.com", "Bob");
-                request.setSigner("Role3", "frank@frank.com", "Frank");
-                request.setSigner("Role4", "bobsson@bob.com", "BobsSon");
-                request.setSigner("Role5", "dkslf@dsflk.com", "lksjfl");
+                request.setSigner("Role1", "george@example.com", "George Franklin");
+                request.setSigner("Role2", "bob@bobl.com", "Bob Johnson");
+                request.setSigner("Role3", "frank@frank.com", "Frank Georgeson");
+                request.setSigner("Role4", "bobsson@bob.com", "BobsSon Johnson");
+                request.setSigner("Role5", "dkslf@dsflk.com", "lksjfl lksjdlak");
                 request.addCustomField(Cost);
                 // request.addCustomField(CostAlso);
                 request.setTestMode(true);
                 request.addMetadata("things", "role");
                 request.addMetadata("lols", "role");
-                
 
-                // String clientId = "d7219512693825facdd9241f458decf2";
                 EmbeddedRequest embedReq = new EmbeddedRequest(clientid, request);
 
                 HelloSignClient client = new HelloSignClient(apikey);
-                // SignatureRequest newRequest = (SignatureRequest) client.createEmbeddedRequest(embedReq);
-                // SignatureRequest newRequest = (SignatureRequest);
                 SignatureRequest newRequest = (SignatureRequest) client.createEmbeddedRequest(embedReq);
+                String id = newRequest.getId();
+                System.out.print(id + "\n");
+                System.out.print(newRequest + "\n");
+
+            } else if (things.equals("9")) {
+
+                // nonembedded signing with template
+                // TODO make this take in a template id and boolean with custom fields
+                // SignatureResponse signatureResponse = newSigantureResponse();
+                TemplateSignatureRequest request = new TemplateSignatureRequest();
+                request.setTemplateId("5f15711bf170531c5336528a1a4cbad2bd10da41");
+                request.setSubject("Purchase Order");
+                request.setMessage("Glad we could come to an agreement.");
+
+                CustomField Cost = new CustomField();
+                Cost.setEditor("Role1");
+                Cost.setIsRequired(Boolean.TRUE);
+                Cost.setValue("$20,000");
+                Cost.setName("Cost");
+                // CustomField CostAlso = new CustomField();
+                // CostAlso.setValue("$30,000");
+                // CostAlso.setName("Cost Also");
+                request.setSigner("Role1", "alex+george@hellosign.com", "George Franklin");
+                request.setSigner("Role2", "alex+bob@hellosign.com", "Bob Johnson");
+                request.setSigner("Role3", "alex+frank@hellosign.com", "Frank Georgeson");
+                request.setSigner("Role4", "alex+bobsson@hellosign.com", "BobsSon Johnson");
+                request.setSigner("Role5", "alex+lksjfl@hellosign.com", "lksjfl lksjdlak");
+                request.addCustomField(Cost);
+                // request.addCustomField(CostAlso);
+                request.setTestMode(true);
+                request.addMetadata("things", "role");
+                request.addMetadata("lols", "role");
+                request.setClientId(clientid);
+
+                HelloSignClient client = new HelloSignClient(apikey);
+                SignatureRequest newRequest = client.sendTemplateSignatureRequest(request);
                 String id = newRequest.getId();
                 System.out.print(id + "\n");
                 System.out.print(newRequest + "\n");
