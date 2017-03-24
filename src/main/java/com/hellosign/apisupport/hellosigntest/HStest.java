@@ -125,9 +125,7 @@ public class HStest {
                 EmbeddedResponse embRequest = client.getEmbeddedSignUrl(signID);
                 String signUrl = embRequest.getSignUrl();
                 String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(signUrl, "UTF-8") + "&client_id=" +clientid;
-                System.out.println(url);
-
-                System.out.print("\n");
+                System.out.println(url + "\n");
 
             } else if (things.equals("4")) {
                 
@@ -259,8 +257,18 @@ public class HStest {
 
                 HelloSignClient client = new HelloSignClient(apikey);
                 SignatureRequest newRequest = (SignatureRequest) client.createEmbeddedRequest(embedReq);
+                
+                Signature sigidRole1 = newRequest.getSignature("george@example.com", "George Franklin");
+                String signID = sigidRole1.getId();
+                System.out.print(signID + "\n");
+                EmbeddedResponse embRequest = client.getEmbeddedSignUrl(signID);
+                String signUrl = embRequest.getSignUrl();
+                String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(signUrl, "UTF-8") + "&client_id=" + clientid;
+                System.out.println(signUrl + "\n");
+                System.out.println(url + "\n");
+                
                 String id = newRequest.getId();
-                System.out.print(id + "\n");
+                System.out.print(id + " lol\n");
                 System.out.print(newRequest + "\n");
 
             } else if (things.equals("9")) {
