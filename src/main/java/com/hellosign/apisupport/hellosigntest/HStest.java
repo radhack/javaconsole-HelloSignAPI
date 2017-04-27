@@ -20,8 +20,9 @@ import org.json.JSONException;
 
 /**
  *
- * @author alexgriffen
- * NOTE TO SELF: you must be in /target to run this
+ * @author alexgriffen NOTE TO SELF: you must be in /target to run this java -cp
+ * HelloSignTest-1.0-SNAPSHOT-jar-with-dependencies.jar
+ * com.hellosign.apisupport.hellosigntest.HStest
  */
 public class HStest {
 
@@ -40,6 +41,7 @@ public class HStest {
                     + "7 for embedded requesting for NON embedded signing\n"
                     + "8 for embedded signing with template\n"
                     + "9 for nonembedded signing with template\n"
+                    + "10 for embedded sig with text tags\n"
                     + "or 0 to exit: ");
             BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
             String things = bufferRead.readLine();
@@ -50,9 +52,9 @@ public class HStest {
                 HelloSignClient client = new HelloSignClient(apikey);
                 Account account = client.getAccount();
                 System.out.println(account.toString(2));
-                
+
             } else if (things.equals("2")) {
-                
+
                 // non-embedded signature request
                 // yes this is sloppy and I'm not catching errors in the email address
                 // HelloSign will catch it when the POST goes out I think, and that's good enough for a simple console app imo
@@ -74,13 +76,13 @@ public class HStest {
                 request.addFile(new File("/Users/alexgriffen/Downloads/a.pdf"));
                 // Prints the JSON response to the console
                 SignatureRequest response = client.sendSignatureRequest(request);
-                
+
                 System.out.println(response.toString());
 
                 System.out.print("Signature Request sent! \n");
-                
+
             } else if (things.equals("3")) {
-                
+
                 //embedded signature request
                 SignatureRequest request = new SignatureRequest();
                 request.addFile(new File("/Users/alexgriffen/NetBeansProjects/HelloSignTest/nda.pdf"));
@@ -93,12 +95,9 @@ public class HStest {
                 request.addSigner("jill@example.com", "Jill");
                 request.setTestMode(true);
 
-                
                 // String clientId = "d7219512693825facdd9241f458decf2";
-
                 // EmbeddedRequest embedReq = new EmbeddedRequest(clientId, request);
                 // leaving those two lines in case I want to make the clientID a choice later on
-                
                 // replacing the clientID below with the clientid String from getenv("HS_CLIENT_ID_PROD")
                 EmbeddedRequest embedReq = new EmbeddedRequest(clientid, request);
 
@@ -119,11 +118,11 @@ public class HStest {
 
                 EmbeddedResponse embRequest = client.getEmbeddedSignUrl(signID);
                 String signUrl = embRequest.getSignUrl();
-                String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(signUrl, "UTF-8") + "&client_id=" +clientid;
+                String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(signUrl, "UTF-8") + "&client_id=" + clientid;
                 System.out.println(url + "\n");
 
             } else if (things.equals("4")) {
-                
+
                 // embedded templates
                 TemplateDraft draft = new TemplateDraft();
                 // String clientId = "d7219512693825facdd9241f458decf2";
@@ -142,11 +141,11 @@ public class HStest {
                 String editUrl = t.getEditUrl();
                 String templateID = t.getId();
                 System.out.print(templateID + "\n");
-                String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(editUrl, "UTF-8") + "&client_id=" +clientid;
+                String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(editUrl, "UTF-8") + "&client_id=" + clientid;
                 System.out.print(url + "\n");
 
             } else if (things.equals("5")) {
-                
+
                 // unclaimed draft with embedded signing
                 // aka embedded requesting for embedded signing
                 SignatureRequest sigReq = new SignatureRequest();
@@ -164,11 +163,11 @@ public class HStest {
                 HelloSignClient client = new HelloSignClient(apikey);
                 UnclaimedDraft responseDraft = (UnclaimedDraft) client.createEmbeddedRequest(embedReq);
                 String claimUrl = responseDraft.getClaimUrl();
-                String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(claimUrl, "UTF-8") + "&client_id=" +clientid;
+                String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(claimUrl, "UTF-8") + "&client_id=" + clientid;
                 System.out.print(url + "\n");
 
             } else if (things.equals("6")) {
-                
+
                 // unclaimed draft for embedded signing using a template from the user
                 // aka embedded requesting with template
                 TemplateSignatureRequest tempsigReq = new TemplateSignatureRequest();
@@ -195,11 +194,11 @@ public class HStest {
                 String claimUrl = responseDraft.getClaimUrl();
                 String signatureID = responseDraft.getSignatureRequestId();
                 System.out.print("\nSignature Request id = " + signatureID + "\n");
-                String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(claimUrl, "UTF-8") + "&client_id=" +clientid;
+                String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(claimUrl, "UTF-8") + "&client_id=" + clientid;
                 System.out.print(url + "\n");
 
             } else if (things.equals("7")) {
-                
+
                 //embedded requesting with NON embedded siging
                 SignatureRequest sigReq = new SignatureRequest();
                 sigReq.setTestMode(true);
@@ -216,11 +215,11 @@ public class HStest {
                 HelloSignClient client = new HelloSignClient(apikey);
                 UnclaimedDraft responseDraft = (UnclaimedDraft) client.createEmbeddedRequest(embedReq);
                 String claimUrl = responseDraft.getClaimUrl();
-                String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(claimUrl, "UTF-8") + "&client_id=" +clientid;
+                String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(claimUrl, "UTF-8") + "&client_id=" + clientid;
                 System.out.print(url + "\n");
 
             } else if (things.equals("8")) {
-                
+
                 // embedded signing with template
                 // TODO make this take in a template id and boolean with custom fields
                 // SignatureResponse signatureResponse = newSigantureResponse();
@@ -252,7 +251,7 @@ public class HStest {
 
                 HelloSignClient client = new HelloSignClient(apikey);
                 SignatureRequest newRequest = (SignatureRequest) client.createEmbeddedRequest(embedReq);
-                
+
                 Signature sigidRole1 = newRequest.getSignature("george@example.com", "George Franklin");
                 String signID = sigidRole1.getId();
                 System.out.print(signID + "\n");
@@ -261,7 +260,7 @@ public class HStest {
                 String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(signUrl, "UTF-8") + "&client_id=" + clientid;
                 System.out.println(signUrl + "\n");
                 System.out.println(url + "\n");
-                
+
                 String id = newRequest.getId();
                 System.out.print(id + " lol\n");
                 System.out.print(newRequest + "\n");
@@ -301,6 +300,36 @@ public class HStest {
                 String id = newRequest.getId();
                 System.out.print(id + "\n");
                 System.out.print(newRequest + "\n");
+
+            } else if (things.equals("10")) {
+                SignatureRequest request = new SignatureRequest();
+                request.addFile(new File("/Users/alexgriffen/NetbeansProjects/HelloSignTest/TestingTextTagsvisible_signer0.pdf")); //one signer in this case, so my PDF has tags for signer1 only
+                request.setSubject("My First embedded signature request");
+                request.setMessage("Awesome, right?");
+                request.addSigner("jack@example.com", "Jack");
+                request.setTestMode(true);
+                request.setUseTextTags(true);
+                request.setHideTextTags(true);
+
+                EmbeddedRequest embedReq = new EmbeddedRequest(clientid, request);
+
+                HelloSignClient client = new HelloSignClient(apikey);
+
+                SignatureRequest newRequest = (SignatureRequest) client.createEmbeddedRequest(embedReq);
+
+// get the signature_id of the first signer
+// hardcoded because I'd rather not take the time to do this programmaticaly
+                Signature sigidFirstSigner = newRequest.getSignature("jack@example.com", "Jack");
+
+                String signID = sigidFirstSigner.getId();
+                System.out.print(signID + "\n");
+                System.out.print("Embedded Signature Request created! \n");
+
+                EmbeddedResponse embRequest = client.getEmbeddedSignUrl(signID);
+                String signUrl = embRequest.getSignUrl();
+                System.out.println(signUrl + "\n");
+                String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(signUrl, "UTF-8") + "&client_id=" + clientid;
+                System.out.println(url + "\n");
 
             } else if (things.equals("0")) {
                 break;
