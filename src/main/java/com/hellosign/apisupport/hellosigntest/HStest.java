@@ -3,6 +3,7 @@ package com.hellosign.apisupport.hellosigntest;
 import com.hellosign.sdk.HelloSignClient;
 
 import com.hellosign.sdk.resource.Account;
+import com.hellosign.sdk.resource.ApiApp;
 
 import com.hellosign.sdk.HelloSignException;
 import com.hellosign.sdk.resource.EmbeddedRequest;
@@ -20,8 +21,9 @@ import org.json.JSONException;
 
 /**
  *
- * @author alexgriffen NOTE TO SELF: you must be in /target to run this
- * java -cp HelloSignTest-1.0-SNAPSHOT-jar-with-dependencies.jar com.hellosign.apisupport.hellosigntest.HStest
+ * @author alexgriffen NOTE TO SELF: you must be in /target to run this java -cp
+ * HelloSignTest-1.0-SNAPSHOT-jar-with-dependencies.jar
+ * com.hellosign.apisupport.hellosigntest.HStest
  */
 public class HStest {
 
@@ -41,6 +43,7 @@ public class HStest {
                     + "8 for embedded signing with template\n"
                     + "9 for nonembedded signing with template\n"
                     + "10 for embedded sig with text tags\n"
+                    + "11 to update the callback url of your app\n"
                     + "or 0 to exit: ");
             BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
             String things = bufferRead.readLine();
@@ -329,6 +332,26 @@ public class HStest {
                 System.out.println(signUrl + "\n");
                 String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(signUrl, "UTF-8") + "&client_id=" + clientid;
                 System.out.println(url + "\n");
+
+            } else if (things.equals("11")) {
+                System.out.println("\nEnter the callback url for your app:\n");
+                BufferedReader bufferRead3 = new BufferedReader(new InputStreamReader(System.in));
+                String appCallbackURL = bufferRead3.readLine();
+                HelloSignClient client = new HelloSignClient(apikey);
+                
+                ApiApp app1 = client.getApiApp(clientid);
+//                ApiApp app = new ApiApp();
+                app1.setCallbackUrl(appCallbackURL);
+                client.updateApiApp(app1);
+                                
+                String callback = app1.getCallbackUrl();
+                System.out.println(callback + "is the callback on the app");
+                
+                
+//                String signID = sigidFirstSigner.getId();
+//                System.out.print(signID + "\n");
+//                System.out.print("Embedded Signature Request created! \n");
+
 
             } else if (things.equals("0")) {
                 break;
