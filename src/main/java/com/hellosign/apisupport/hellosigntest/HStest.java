@@ -19,6 +19,8 @@ import java.io.*;
 import java.net.URLEncoder;
 import org.json.JSONException;
 import java.util.concurrent.TimeUnit;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -364,9 +366,9 @@ public class HStest {
                 SignatureRequest request = client.getSignatureRequest(sigRequestId);
 
                 System.out.println(request + "\n");
-                
+
                 Object filesUrl = client.getFilesUrl(sigRequestId);
-                
+
                 System.out.println(filesUrl + "\n");
 
             } else if (things.equals("13")) {
@@ -420,16 +422,18 @@ public class HStest {
 
                         SignatureRequest requestGet = client.getSignatureRequest(requestId);
                         System.out.println(requestGet + "\n");
-                        
-                        
+
                         EmbeddedResponse embRequest = client.getEmbeddedSignUrl(signID);
                         String signUrl = embRequest.getSignUrl();
                         String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(signUrl, "UTF-8") + "&client_id=" + clientid;
                         System.out.println(url + "\n");
-                        
-                        
+
                         System.out.println("starting loop again\n");
                         
+                        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+                        LocalDateTime now = LocalDateTime.now();
+                        System.out.println(dtf.format(now)); //2016/11/16 12:08:43
+
                         TimeUnit.MINUTES.sleep(5);
                     } catch (InterruptedException e) {
                         System.out.println(e);
