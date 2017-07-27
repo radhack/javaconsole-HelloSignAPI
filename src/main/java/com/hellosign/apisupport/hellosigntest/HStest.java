@@ -403,6 +403,8 @@ public class HStest {
 
                         HelloSignClient client = new HelloSignClient(apikey);
                         SignatureRequest newRequest = (SignatureRequest) client.createEmbeddedRequest(embedReq);
+                        String requestId = newRequest.getId();
+                        System.out.print(requestId + " is the signature_request_id\n");
                         // get the signature_id of the first signer
                         // hardcoded because I'd rather not take the time to do this programmaticaly
                         // was thinking of a for or while loop with "1" or "2" for the two different signers
@@ -413,13 +415,18 @@ public class HStest {
                         // the webapp should include it though
                         Signature sigidFirstSigner = newRequest.getSignature("jack@example.com", "Jack");
                         String signID = sigidFirstSigner.getId();
-                        System.out.print(signID + "\n");
+                        System.out.print(signID + " is the signature_id of the first signer\n");
                         System.out.print("Embedded Signature Request created! \n");
 
+                        SignatureRequest requestGet = client.getSignatureRequest(requestId);
+                        System.out.println(requestGet + "\n");
+                        
+                        
                         EmbeddedResponse embRequest = client.getEmbeddedSignUrl(signID);
                         String signUrl = embRequest.getSignUrl();
                         String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(signUrl, "UTF-8") + "&client_id=" + clientid;
                         System.out.println(url + "\n");
+                        
                         
                         System.out.println("starting loop again\n");
                         
