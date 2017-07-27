@@ -364,6 +364,10 @@ public class HStest {
                 SignatureRequest request = client.getSignatureRequest(sigRequestId);
 
                 System.out.println(request + "\n");
+                
+                Object filesUrl = client.getFilesUrl(sigRequestId);
+                
+                System.out.println(filesUrl + "\n");
 
             } else if (things.equals("13")) {
 
