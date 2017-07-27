@@ -366,22 +366,64 @@ public class HStest {
                 System.out.println(request + "\n");
 
             } else if (things.equals("13")) {
-                              
+
                 while (true) { //just an always-true statement to keep the while loop running
                     try {
                         System.out.println("\nWaiting for 5 minutes...\n");
-                        System.out.println("Enter 1 to break the loop after the wait:\n");
-                        BufferedReader bufferRead1 = new BufferedReader(new InputStreamReader(System.in));
-                        System.out.println(bufferRead1);
-                        String breakOrNo = bufferRead1.readLine();
-                        TimeUnit.SECONDS.sleep(5);
-                        if (breakOrNo.equals("1")) {
-                            break;
-                        }
+                        System.out.println("Enter ctrl+c to break the loop\n");
+//                        BufferedReader bufferRead1 = new BufferedReader(new InputStreamReader(System.in));
+//                        System.out.println(bufferRead1);
+//                        String breakOrNo = bufferRead1.readLine();
+//                        if (breakOrNo.equals("1")) {
+//                            break;
+//                        }
+//                  commenting all of that out - not sure how to allow user to input but also keep the loop running
+
+                        //embedded signature request
+                        SignatureRequest request = new SignatureRequest();
+                        request.addFile(new File("/Users/alexgriffen/NetBeansProjects/HelloSignTest/nda.pdf"));
+                        request.setSubject("My First embedded signature request"); //lol I did my first already, so this hardcoded 'subject' is a LIE and you'll never know
+                        // muahhhhhh haaa haaa 
+                        // ^ evil laugh
+
+                        request.setMessage("Awesome, right?");
+                        request.addSigner("jack@example.com", "Jack");
+                        request.addSigner("jill@example.com", "Jill");
+                        request.setTestMode(true);
+
+                        // String clientId = "d7219512693825facdd9241f458decf2";
+                        // EmbeddedRequest embedReq = new EmbeddedRequest(clientId, request);
+                        // leaving those two lines in case I want to make the clientID a choice later on
+                        // replacing the clientID below with the clientid String from getenv("HS_CLIENT_ID_PROD")
+                        EmbeddedRequest embedReq = new EmbeddedRequest(clientid, request);
+
+                        HelloSignClient client = new HelloSignClient(apikey);
+                        SignatureRequest newRequest = (SignatureRequest) client.createEmbeddedRequest(embedReq);
+                        // get the signature_id of the first signer
+                        // hardcoded because I'd rather not take the time to do this programmaticaly
+                        // was thinking of a for or while loop with "1" or "2" for the two different signers
+                        // and handle any entry that isn't "1" or "2"
+                        // but to make that make sense, I'd have to keep the user in the loop until they
+                        // had all of the URLs they wanted
+                        // and for this simple example, that's more effort than I'd like to spend
+                        // the webapp should include it though
+                        Signature sigidFirstSigner = newRequest.getSignature("jack@example.com", "Jack");
+                        String signID = sigidFirstSigner.getId();
+                        System.out.print(signID + "\n");
+                        System.out.print("Embedded Signature Request created! \n");
+
+                        EmbeddedResponse embRequest = client.getEmbeddedSignUrl(signID);
+                        String signUrl = embRequest.getSignUrl();
+                        String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(signUrl, "UTF-8") + "&client_id=" + clientid;
+                        System.out.println(url + "\n");
+                        
+                        System.out.println("starting loop again\n");
+                        
+                        TimeUnit.MINUTES.sleep(5);
                     } catch (InterruptedException e) {
                         System.out.println(e);
                     }
-                    
+
                 }
 
             } else if (things.equals("0")) {
