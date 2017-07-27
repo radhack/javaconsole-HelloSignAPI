@@ -18,6 +18,7 @@ import com.hellosign.sdk.resource.support.types.UnclaimedDraftType;
 import java.io.*;
 import java.net.URLEncoder;
 import org.json.JSONException;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -44,6 +45,8 @@ public class HStest {
                     + "9 for nonembedded signing with template\n"
                     + "10 for embedded sig with text tags\n"
                     + "11 to update the callback url of your app\n"
+                    + "12 to get a signature request object response\n"
+                    + "13 to trigger a loop where every 5 minutes, a signature request is generated\n"
                     + "or 0 to exit: ");
             BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
             String things = bufferRead.readLine();
@@ -338,20 +341,48 @@ public class HStest {
                 BufferedReader bufferRead3 = new BufferedReader(new InputStreamReader(System.in));
                 String appCallbackURL = bufferRead3.readLine();
                 HelloSignClient client = new HelloSignClient(apikey);
-                
+
                 ApiApp app1 = client.getApiApp(clientid);
 //                ApiApp app = new ApiApp();
                 app1.setCallbackUrl(appCallbackURL);
                 client.updateApiApp(app1);
-                                
+
                 String callback = app1.getCallbackUrl();
                 System.out.println(callback + "is the callback on the app");
-                
-                
+
 //                String signID = sigidFirstSigner.getId();
 //                System.out.print(signID + "\n");
 //                System.out.print("Embedded Signature Request created! \n");
+            } else if (things.equals("12")) {
 
+                // GET signature request response object
+                System.out.println("\nEnter the signature_request_id of the request you'd like to see:\n");
+                BufferedReader bufferRead1 = new BufferedReader(new InputStreamReader(System.in));
+                String sigRequestId = bufferRead1.readLine();
+
+                HelloSignClient client = new HelloSignClient(apikey);
+                SignatureRequest request = client.getSignatureRequest(sigRequestId);
+
+                System.out.println(request + "\n");
+
+            } else if (things.equals("13")) {
+                              
+                while (true) { //just an always-true statement to keep the while loop running
+                    try {
+                        System.out.println("\nWaiting for 5 minutes...\n");
+                        System.out.println("Enter 1 to break the loop after the wait:\n");
+                        BufferedReader bufferRead1 = new BufferedReader(new InputStreamReader(System.in));
+                        System.out.println(bufferRead1);
+                        String breakOrNo = bufferRead1.readLine();
+                        TimeUnit.SECONDS.sleep(5);
+                        if (breakOrNo.equals("1")) {
+                            break;
+                        }
+                    } catch (InterruptedException e) {
+                        System.out.println(e);
+                    }
+                    
+                }
 
             } else if (things.equals("0")) {
                 break;
