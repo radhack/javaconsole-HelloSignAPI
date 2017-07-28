@@ -420,6 +420,11 @@ public class HStest {
                         System.out.print(signID + " is the signature_id of the first signer\n");
                         System.out.print("Embedded Signature Request created! \n");
 
+                        TimeUnit.SECONDS.sleep(10);
+
+                        Object filesUrl = client.getFilesUrl(requestId);
+                        System.out.println(filesUrl + "\n");
+
                         SignatureRequest requestGet = client.getSignatureRequest(requestId);
                         System.out.println(requestGet + "\n");
 
@@ -429,7 +434,7 @@ public class HStest {
                         System.out.println(url + "\n");
 
                         System.out.println("starting loop again\n");
-                        
+
                         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
                         LocalDateTime now = LocalDateTime.now();
                         System.out.println(dtf.format(now)); //2016/11/16 12:08:43
