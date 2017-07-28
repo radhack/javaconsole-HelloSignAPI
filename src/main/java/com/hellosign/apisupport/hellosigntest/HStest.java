@@ -425,7 +425,7 @@ public class HStest {
                         Object filesUrl = client.getFilesUrl(requestId);
                         System.out.println(filesUrl + "\n");
 
-                        SignatureRequest requestGet = client.getSignatureRequest(requestId + "?get_url=1");
+                        SignatureRequest requestGet = client.getSignatureRequest(requestId);
                         System.out.println(requestGet + "\n");
 
                         EmbeddedResponse embRequest = client.getEmbeddedSignUrl(signID);
