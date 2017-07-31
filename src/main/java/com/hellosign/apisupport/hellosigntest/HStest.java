@@ -375,7 +375,7 @@ public class HStest {
 
                 while (true) { //just an always-true statement to keep the while loop running
                     try {
-                        System.out.println("Enter ctrl+c to break the loop\n");
+                        System.out.println("Starting loop. Enter ctrl+c to break.\n");
 //                        BufferedReader bufferRead1 = new BufferedReader(new InputStreamReader(System.in));
 //                        System.out.println(bufferRead1);
 //                        String breakOrNo = bufferRead1.readLine();
@@ -432,8 +432,6 @@ public class HStest {
                         String signUrl = embRequest.getSignUrl();
                         String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(signUrl, "UTF-8") + "&client_id=" + clientid;
                         System.out.println(url + "\n");
-
-                        System.out.println("starting loop again\n");
 
                         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
                         LocalDateTime now = LocalDateTime.now();
