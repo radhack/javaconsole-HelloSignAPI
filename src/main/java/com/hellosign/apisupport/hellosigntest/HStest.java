@@ -375,7 +375,6 @@ public class HStest {
 
                 while (true) { //just an always-true statement to keep the while loop running
                     try {
-                        System.out.println("\nWaiting for 5 minutes...\n");
                         System.out.println("Enter ctrl+c to break the loop\n");
 //                        BufferedReader bufferRead1 = new BufferedReader(new InputStreamReader(System.in));
 //                        System.out.println(bufferRead1);
@@ -420,6 +419,7 @@ public class HStest {
                         System.out.print(signID + " is the signature_id of the first signer\n");
                         System.out.print("Embedded Signature Request created! \n");
 
+                        System.out.println("\nWaiting for 10 seconds...\n");
                         TimeUnit.SECONDS.sleep(10);
 
                         Object filesUrl = client.getFilesUrl(requestId);
@@ -439,6 +439,7 @@ public class HStest {
                         LocalDateTime now = LocalDateTime.now();
                         System.out.println(dtf.format(now)); //2016/11/16 12:08:43
 
+                        System.out.println("\nWaiting for 5 minutes...\n");
                         TimeUnit.MINUTES.sleep(5);
                     } catch (InterruptedException e) {
                         System.out.println(e);
