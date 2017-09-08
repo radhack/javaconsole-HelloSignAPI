@@ -1,10 +1,8 @@
 package com.hellosign.apisupport.hellosigntest;
 
 import com.hellosign.sdk.HelloSignClient;
-
 import com.hellosign.sdk.resource.Account;
 import com.hellosign.sdk.resource.ApiApp;
-
 import com.hellosign.sdk.HelloSignException;
 import com.hellosign.sdk.resource.EmbeddedRequest;
 import com.hellosign.sdk.resource.EmbeddedResponse;
@@ -15,6 +13,7 @@ import com.hellosign.sdk.resource.UnclaimedDraft;
 import com.hellosign.sdk.resource.support.CustomField;
 import com.hellosign.sdk.resource.support.Signature;
 import com.hellosign.sdk.resource.support.types.UnclaimedDraftType;
+
 import java.io.*;
 import java.net.URLEncoder;
 import org.json.JSONException;
@@ -339,18 +338,22 @@ public class HStest {
                 System.out.println(url + "\n");
 
             } else if (things.equals("11")) {
-                System.out.println("\nEnter the callback url for your app:\n");
+                
+                HelloSignClient client = new HelloSignClient(apikey);
+                ApiApp app1 = client.getApiApp(clientid);
+                
+                String callback_pre = app1.getCallbackUrl();
+                System.out.println(callback_pre + "is the callback on the app at this point\n");
+                
+                System.out.println("\nEnter the new callback url for your app:\n");
                 BufferedReader bufferRead3 = new BufferedReader(new InputStreamReader(System.in));
                 String appCallbackURL = bufferRead3.readLine();
-                HelloSignClient client = new HelloSignClient(apikey);
-
-                ApiApp app1 = client.getApiApp(clientid);
-//                ApiApp app = new ApiApp();
+                                                               
                 app1.setCallbackUrl(appCallbackURL);
                 client.updateApiApp(app1);
 
                 String callback = app1.getCallbackUrl();
-                System.out.println(callback + "is the callback on the app");
+                System.out.println(callback + "is the new callback on the app");
 
 //                String signID = sigidFirstSigner.getId();
 //                System.out.print(signID + "\n");
