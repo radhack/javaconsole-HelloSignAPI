@@ -48,18 +48,19 @@ public class HStest {
                     + "11 to update the callback url of your app\n"
                     + "12 to get a signature request object response\n"
                     + "13 to trigger a loop where every 5 minutes, a signature request is generated\n"
+                    + "14 to create a new API App with White Labeling\n"
                     + "or 0 to exit: ");
             BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
-            String things = bufferRead.readLine();
+            String options = bufferRead.readLine();
 
-            if (things.equals("1")) {
+            if (options.equals("1")) {
                 // this GETs the account object
                 System.out.print(apikey + "\n");
                 HelloSignClient client = new HelloSignClient(apikey);
                 Account account = client.getAccount();
                 System.out.println(account.toString(2));
 
-            } else if (things.equals("2")) {
+            } else if (options.equals("2")) {
 
                 // non-embedded signature request
                 // yes this is sloppy and I'm not catching errors in the email address
@@ -87,7 +88,7 @@ public class HStest {
 
                 System.out.print("Signature Request sent! \n");
 
-            } else if (things.equals("3")) {
+            } else if (options.equals("3")) {
 
                 //embedded signature request
                 SignatureRequest request = new SignatureRequest();
@@ -127,7 +128,7 @@ public class HStest {
                 String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(signUrl, "UTF-8") + "&client_id=" + clientid;
                 System.out.println(url + "\n");
 
-            } else if (things.equals("4")) {
+            } else if (options.equals("4")) {
 
                 // embedded templates
                 TemplateDraft draft = new TemplateDraft();
@@ -150,7 +151,7 @@ public class HStest {
                 String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(editUrl, "UTF-8") + "&client_id=" + clientid;
                 System.out.print(url + "\n");
 
-            } else if (things.equals("5")) {
+            } else if (options.equals("5")) {
 
                 // unclaimed draft with embedded signing
                 // aka embedded requesting for embedded signing
@@ -172,7 +173,7 @@ public class HStest {
                 String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(claimUrl, "UTF-8") + "&client_id=" + clientid;
                 System.out.print(url + "\n");
 
-            } else if (things.equals("6")) {
+            } else if (options.equals("6")) {
 
                 // unclaimed draft for embedded signing using a template from the user
                 // aka embedded requesting with template
@@ -203,7 +204,7 @@ public class HStest {
                 String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(claimUrl, "UTF-8") + "&client_id=" + clientid;
                 System.out.print(url + "\n");
 
-            } else if (things.equals("7")) {
+            } else if (options.equals("7")) {
 
                 //embedded requesting with NON embedded siging
                 SignatureRequest sigReq = new SignatureRequest();
@@ -224,7 +225,7 @@ public class HStest {
                 String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(claimUrl, "UTF-8") + "&client_id=" + clientid;
                 System.out.print(url + "\n");
 
-            } else if (things.equals("8")) {
+            } else if (options.equals("8")) {
 
                 // embedded signing with template
                 // TODO make this take in a template id and boolean with custom fields
@@ -271,7 +272,7 @@ public class HStest {
                 System.out.print(id + " lol\n");
                 System.out.print(newRequest + "\n");
 
-            } else if (things.equals("9")) {
+            } else if (options.equals("9")) {
 
                 // nonembedded signing with template
                 // TODO make this take in a template id and boolean with custom fields
@@ -307,7 +308,7 @@ public class HStest {
                 System.out.print(id + "\n");
                 System.out.print(newRequest + "\n");
 
-            } else if (things.equals("10")) {
+            } else if (options.equals("10")) {
                 SignatureRequest request = new SignatureRequest();
                 request.addFile(new File("/Users/alexgriffen/NetbeansProjects/HelloSignTest/TestingTextTagsvisible_signer0.pdf")); //one signer in this case, so my PDF has tags for signer1 only
                 request.setSubject("My First embedded signature request");
@@ -337,28 +338,25 @@ public class HStest {
                 String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(signUrl, "UTF-8") + "&client_id=" + clientid;
                 System.out.println(url + "\n");
 
-            } else if (things.equals("11")) {
-                
+            } else if (options.equals("11")) {
+
                 HelloSignClient client = new HelloSignClient(apikey);
                 ApiApp app1 = client.getApiApp(clientid);
-                
+
                 String callback_pre = app1.getCallbackUrl();
-                System.out.println(callback_pre + "is the callback on the app at this point\n");
-                
+                System.out.println(callback_pre + " is the callback on the app at this point\n");
+
                 System.out.println("\nEnter the new callback url for your app:\n");
                 BufferedReader bufferRead3 = new BufferedReader(new InputStreamReader(System.in));
                 String appCallbackURL = bufferRead3.readLine();
-                                                               
+
                 app1.setCallbackUrl(appCallbackURL);
                 client.updateApiApp(app1);
 
                 String callback = app1.getCallbackUrl();
-                System.out.println(callback + "is the new callback on the app");
+                System.out.println(callback + " is the new callback on the app");
 
-//                String signID = sigidFirstSigner.getId();
-//                System.out.print(signID + "\n");
-//                System.out.print("Embedded Signature Request created! \n");
-            } else if (things.equals("12")) {
+            } else if (options.equals("12")) {
 
                 // GET signature request response object
                 System.out.println("\nEnter the signature_request_id of the request you'd like to see:\n");
@@ -374,7 +372,7 @@ public class HStest {
 
                 System.out.println(filesUrl + "\n");
 
-            } else if (things.equals("13")) {
+            } else if (options.equals("13")) {
 
                 while (true) { //just an always-true statement to keep the while loop running
                     try {
@@ -448,7 +446,55 @@ public class HStest {
 
                 }
 
-            } else if (things.equals("0")) {
+            } else if (options.equals("14")) {
+                // create a new Api App with white labeling
+
+                ApiApp app = new ApiApp();
+
+                app.setCallbackUrl("https://hstests.ngrok.io/callback.php");
+                app.setCustomLogo(new File("/Users/alexgriffen/NetBeansProjects/HelloSignTest/transparent_image.png"));
+//                app.setHeaderBackgroundColor("#00b3e6");
+                app.setPrimaryButtonColor("#00b3e6");
+                app.setPrimaryButtonTextColor("#ffffff");
+                app.setDomain("ngrok.io");
+                LocalDateTime now = LocalDateTime.now();
+                app.setName(now + " is the name");
+//                app.setWhiteLabelingOptions(options);
+                // CustomField CostAlso = new CustomField();
+                // CostAlso.setValue("$30,000");
+                // CostAlso.setName("Cost Also");
+
+//                WhiteLabelingOptions wLoptions = new WhiteLabelingOptions();
+//                wLoptions.setHeaderBackgroundColor("#efefef");
+//                wLoptions.set
+                HelloSignClient client = new HelloSignClient(apikey);
+                ApiApp newApp = (ApiApp) client.createApiApp(app);
+
+                String client_id = newApp.getClientId();
+
+                System.out.println(client_id + " is the new client_id\n\n");
+
+                System.out.println("\nEnter 1 if you'd like to delete the new client_id:\n");
+                BufferedReader keepAp = new BufferedReader(new InputStreamReader(System.in));
+                String keepApOrDelete = keepAp.readLine();
+                if (keepApOrDelete.equals("1")) {
+                    client.deleteApiApp(client_id);
+                }
+
+            } else if (options.equals("15")) {
+                // check if an account is valid for oauth
+
+                System.out.println("\nEnter the email address of the account that you'd like to check:\n");
+                BufferedReader emailAddress = new BufferedReader(new InputStreamReader(System.in));
+                String accountEmail = emailAddress.readLine();
+                HelloSignClient client = new HelloSignClient(apikey);
+                if (client.isAccountValid(accountEmail)) {
+                    // Account is valid
+                    System.out.println("\nThat account is valid.\n Please use this link to authorize oAuth:\n https://app.hellosign.com/oauth/authorize?response_type=code&client_id=2d9e5cbc5d888bef3253c0489d6851f5&state=somethingrandom");
+                    
+                }
+
+            } else if (options.equals("0")) {
                 break;
             } else {
                 System.out.println("That was NOT an option - get it together, yo! \n");
