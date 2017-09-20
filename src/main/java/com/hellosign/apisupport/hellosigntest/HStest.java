@@ -73,7 +73,9 @@ public class HStest {
                 String signername = bufferRead2.readLine();
                 HelloSignClient client = new HelloSignClient(apikey);
                 SignatureRequest request = new SignatureRequest();
-                request.setSubject("NDA from JAVA");
+//                request.setSubject("NDA from JAVA");
+                request.setSubject("Subject Here");
+                request.setTitle("Title Here");
                 request.setTestMode(true);
                 request.setMessage("Triggered from Alex's JAVA SDK Integration");
                 request.addSigner(emailaddress, signername);
