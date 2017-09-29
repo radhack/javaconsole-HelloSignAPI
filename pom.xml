@@ -10,12 +10,12 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
-    <repositories>
+<!--    <repositories>
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
-    </repositories>
+    </repositories>-->
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-jdk14 -->
         <dependency>
@@ -23,17 +23,17 @@
             <artifactId>slf4j-jdk14</artifactId>
             <version>1.8.0-alpha2</version>
         </dependency>
-<!--        <dependency>
+        <dependency>
             <groupId>com.hellosign</groupId>
             <artifactId>hellosign-java-sdk</artifactId>
             <version>4.0.7</version>
             <classifier>jar-with-dependencies</classifier>
-        </dependency>-->
-        <dependency>
+        </dependency>
+<!--        <dependency>
             <groupId>com.github.radhack</groupId>
             <artifactId>hellosign-java-sdk</artifactId>
             <version>-SNAPSHOT</version>
-        </dependency>
+        </dependency>-->
 
         <dependency>
             <groupId>com.google.code.gson</groupId>
