@@ -79,6 +79,7 @@ public class HStest {
                 request.setTestMode(true);
                 request.setMessage("Triggered from Alex's JAVA SDK Integration");
                 request.addSigner(emailaddress, signername);
+                request.setRedirectUrl("https://google.com");
                 request.setClientId(clientid);
 
                 //request.addFile(new File("/Users/alexgriffen/NetBeansProjects/HelloSignTest/nda.pdf"));
@@ -232,47 +233,72 @@ public class HStest {
                 // embedded signing with template
                 // TODO make this take in a template id and boolean with custom fields
                 // SignatureResponse signatureResponse = newSigantureResponse();
+                
+                // commenting out this section to test redirectUrl
+//                TemplateSignatureRequest request = new TemplateSignatureRequest();
+//                request.setTemplateId("5f15711bf170531c5336528a1a4cbad2bd10da41");
+//                request.setSubject("Purchase Order");
+//                request.setMessage("Glad we could come to an agreement.");
+//
+//                CustomField Cost = new CustomField();
+//                Cost.setEditor("Role1");
+//                Cost.setIsRequired(Boolean.TRUE);
+//                Cost.setValue("$20,000");
+//                Cost.setName("Cost");
+//                request.addCustomField(Cost);
+//                // CustomField CostAlso = new CustomField();
+//                // CostAlso.setValue("$30,000");
+//                // CostAlso.setName("Cost Also");
+//                // request.addCustomField(CostAlso);
+//                request.setSigner("Role1", "george@example.com", "George Franklin");
+//                request.setSigner("Role2", "bob@bobl.com", "Bob Johnson");
+//                request.setSigner("Role3", "frank@frank.com", "Frank Georgeson");
+//                request.setSigner("Role4", "bobsson@bob.com", "BobsSon Johnson");
+//                request.setSigner("Role5", "dkslf@dsflk.com", "lksjfl lksjdlak");
+//
+//                request.setTestMode(true);
+//                request.addMetadata("things", "role");
+//                request.addMetadata("lols", "role");
+//                request.setRedirectUrl("https://google.com");
+
+//                EmbeddedRequest embedReq = new EmbeddedRequest(clientid, request);
+//                HelloSignClient client = new HelloSignClient(apikey);
+//                SignatureRequest newRequest = (SignatureRequest) client.createEmbeddedRequest(embedReq);
+//
+//                Signature sigidRole1 = newRequest.getSignature("george@example.com", "George Franklin");
+//                String signID = sigidRole1.getId();
+//                System.out.print(signID + "\n");
+//                EmbeddedResponse embRequest = client.getEmbeddedSignUrl(signID);
+//                String signUrl = embRequest.getSignUrl();
+//                String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(signUrl, "UTF-8") + "&client_id=" + clientid;
+//                System.out.println(signUrl + "\n");
+//                System.out.println(url + "\n");
+//
+//                String id = newRequest.getId();
+//                System.out.print(id + " lol\n");
+//                System.out.print(newRequest + "\n");
+
                 TemplateSignatureRequest request = new TemplateSignatureRequest();
                 request.setTemplateId("5f15711bf170531c5336528a1a4cbad2bd10da41");
                 request.setSubject("Purchase Order");
                 request.setMessage("Glad we could come to an agreement.");
-
-                CustomField Cost = new CustomField();
-                Cost.setEditor("Role1");
-                Cost.setIsRequired(Boolean.TRUE);
-                Cost.setValue("$20,000");
-                Cost.setName("Cost");
-                // CustomField CostAlso = new CustomField();
-                // CostAlso.setValue("$30,000");
-                // CostAlso.setName("Cost Also");
                 request.setSigner("Role1", "george@example.com", "George Franklin");
                 request.setSigner("Role2", "bob@bobl.com", "Bob Johnson");
                 request.setSigner("Role3", "frank@frank.com", "Frank Georgeson");
                 request.setSigner("Role4", "bobsson@bob.com", "BobsSon Johnson");
                 request.setSigner("Role5", "dkslf@dsflk.com", "lksjfl lksjdlak");
-                request.addCustomField(Cost);
-                // request.addCustomField(CostAlso);
-                request.setTestMode(true);
-                request.addMetadata("things", "role");
-                request.addMetadata("lols", "role");
+//                request.setRedirectUrl("https://google.com");
 
-                EmbeddedRequest embedReq = new EmbeddedRequest(clientid, request);
+                request.setCustomFieldValue("Cost", "$20,000");
+                request.setTestMode(true);
 
                 HelloSignClient client = new HelloSignClient(apikey);
-                SignatureRequest newRequest = (SignatureRequest) client.createEmbeddedRequest(embedReq);
+                SignatureRequest response = client.sendTemplateSignatureRequest(request);
+//                SignatureRequest response = client.sendTemplateSignatureRequest(request);
 
-                Signature sigidRole1 = newRequest.getSignature("george@example.com", "George Franklin");
-                String signID = sigidRole1.getId();
-                System.out.print(signID + "\n");
-                EmbeddedResponse embRequest = client.getEmbeddedSignUrl(signID);
-                String signUrl = embRequest.getSignUrl();
-                String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(signUrl, "UTF-8") + "&client_id=" + clientid;
-                System.out.println(signUrl + "\n");
-                System.out.println(url + "\n");
+                System.out.println(response.toString());
 
-                String id = newRequest.getId();
-                System.out.print(id + " lol\n");
-                System.out.print(newRequest + "\n");
+                System.out.print("Signature Request sent! \n");
 
             } else if (options.equals("9")) {
 
@@ -493,7 +519,7 @@ public class HStest {
                 if (client.isAccountValid(accountEmail)) {
                     // Account is valid
                     System.out.println("\nThat account is valid.\n Please use this link to authorize oAuth:\n https://app.hellosign.com/oauth/authorize?response_type=code&client_id=2d9e5cbc5d888bef3253c0489d6851f5&state=somethingrandom");
-                    
+
                 }
 
             } else if (options.equals("0")) {
