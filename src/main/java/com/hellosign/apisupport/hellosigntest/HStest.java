@@ -49,6 +49,7 @@ public class HStest {
                     + "12 to get a signature request object response\n"
                     + "13 to trigger a loop where every 5 minutes, a signature request is generated\n"
                     + "14 to create a new API App with White Labeling\n"
+                    + "15 to check if an account is valid for oauth\n"
                     + "or 0 to exit: ");
             BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
             String options = bufferRead.readLine();
