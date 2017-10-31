@@ -51,6 +51,11 @@ public class HStest {
                     + "14 to create a new API App with White Labeling\n"
                     + "15 to check if an account is valid for oauth\n"
                     + "or 0 to exit: ");
+            
+            String localFile = "/Users/alexgriffen/NetBeansProjects/HelloSignTest/nda.pdf";
+            String localTextTagsFile = "/Users/alexgriffen/NetbeansProjects/HelloSignTest/TestingTextTagsvisible_signer0.pdf";
+            String localLogo = "/Users/alexgriffen/NetBeansProjects/HelloSignTest/transparent_image.png";
+            
             BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
             String options = bufferRead.readLine();
 
@@ -83,8 +88,8 @@ public class HStest {
                 request.setRedirectUrl("https://google.com");
                 request.setClientId(clientid);
 
-                //request.addFile(new File("/Users/alexgriffen/NetBeansProjects/HelloSignTest/nda.pdf"));
-                request.addFile(new File("/Users/alexgriffen/Downloads/a.pdf"));
+                //request.addFile(new File(localFile));
+                request.addFile(new File(localFile));
                 // Prints the JSON response to the console
                 SignatureRequest response = client.sendSignatureRequest(request);
 
@@ -96,7 +101,7 @@ public class HStest {
 
                 //embedded signature request
                 SignatureRequest request = new SignatureRequest();
-                request.addFile(new File("/Users/alexgriffen/NetBeansProjects/HelloSignTest/nda.pdf"));
+                request.addFile(new File(localFile));
                 request.setSubject("My First embedded signature request"); //lol I did my first already, so this hardcoded 'subject' is a LIE and you'll never know
                 // muahhhhhh haaa haaa 
                 // ^ evil laugh
@@ -144,7 +149,7 @@ public class HStest {
                 draft.addSignerRole("Signer2", 2);
                 draft.setOrderMatters(true);
                 draft.addCCRole("Lawyer");
-                draft.addFile(new File("/Users/alexgriffen/NetBeansProjects/HelloSignTest/nda.pdf"));
+                draft.addFile(new File(localFile));
 
                 EmbeddedRequest eReq = new EmbeddedRequest(clientid, draft);
                 HelloSignClient client = new HelloSignClient(apikey);
@@ -161,7 +166,7 @@ public class HStest {
                 // aka embedded requesting for embedded signing
                 SignatureRequest sigReq = new SignatureRequest();
                 sigReq.setTestMode(true);
-                sigReq.addFile(new File("/Users/alexgriffen/NetBeansProjects/HelloSignTest/nda.pdf"));
+                sigReq.addFile(new File(localFile));
 
                 UnclaimedDraft draft = new UnclaimedDraft(sigReq, UnclaimedDraftType.request_signature);
                 draft.setIsForEmbeddedSigning(true);
@@ -213,7 +218,7 @@ public class HStest {
                 //embedded requesting with NON embedded siging
                 SignatureRequest sigReq = new SignatureRequest();
                 sigReq.setTestMode(true);
-                sigReq.addFile(new File("/Users/alexgriffen/NetBeansProjects/HelloSignTest/nda.pdf"));
+                sigReq.addFile(new File(localFile));
 
                 UnclaimedDraft draft = new UnclaimedDraft(sigReq, UnclaimedDraftType.request_signature);
                 draft.setIsForEmbeddedSigning(false);
@@ -339,7 +344,7 @@ public class HStest {
 
             } else if (options.equals("10")) {
                 SignatureRequest request = new SignatureRequest();
-                request.addFile(new File("/Users/alexgriffen/NetbeansProjects/HelloSignTest/TestingTextTagsvisible_signer0.pdf")); //one signer in this case, so my PDF has tags for signer1 only
+                request.addFile(new File(localTextTagsFile)); //one signer in this case, so my PDF has tags for signer1 only
                 request.setSubject("My First embedded signature request");
                 request.setMessage("Awesome, right?");
                 request.addSigner("jack@example.com", "Jack");
@@ -416,7 +421,7 @@ public class HStest {
 
                         //embedded signature request
                         SignatureRequest request = new SignatureRequest();
-                        request.addFile(new File("/Users/alexgriffen/NetBeansProjects/HelloSignTest/nda.pdf"));
+                        request.addFile(new File(localFile));
                         request.setSubject("My First embedded signature request"); //lol I did my first already, so this hardcoded 'subject' is a LIE and you'll never know
                         // muahhhhhh haaa haaa 
                         // ^ evil laugh
@@ -481,7 +486,7 @@ public class HStest {
                 ApiApp app = new ApiApp();
 
                 app.setCallbackUrl("https://hstests.ngrok.io/callback.php");
-                app.setCustomLogo(new File("/Users/alexgriffen/NetBeansProjects/HelloSignTest/transparent_image.png"));
+                app.setCustomLogo(new File(localLogo));
 //                app.setHeaderBackgroundColor("#00b3e6");
                 app.setPrimaryButtonColor("#00b3e6");
                 app.setPrimaryButtonTextColor("#ffffff");
