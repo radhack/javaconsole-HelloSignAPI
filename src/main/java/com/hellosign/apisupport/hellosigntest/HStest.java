@@ -58,7 +58,7 @@ public class HStest {
             
             BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
             String options = bufferRead.readLine();
-
+            
             if (options.equals("1")) {
                 // this GETs the account object
                 System.out.print(apikey + "\n");
@@ -86,6 +86,7 @@ public class HStest {
                 request.setMessage("Triggered from Alex's JAVA SDK Integration");
                 request.addSigner(emailaddress, signername);
                 request.setRedirectUrl("https://google.com");
+                request.setIsDeclinable(Boolean.FALSE);
                 request.setClientId(clientid);
 
                 //request.addFile(new File(localFile));
