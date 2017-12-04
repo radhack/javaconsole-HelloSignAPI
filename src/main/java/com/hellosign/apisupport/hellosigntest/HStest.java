@@ -474,17 +474,15 @@ public class HStest {
                         LocalDateTime now = LocalDateTime.now();
                         System.out.println(dtf.format(now)); //2016/11/16 12:08:43
 
-<<<<<<< HEAD
                         System.out.println("\nWaiting for 20 seconds...\n");
                         TimeUnit.SECONDS.sleep(20);
-=======
+
                         i++;
                         System.out.println(i + " is the number of times this has run");
                         
                         System.out.println("\nWaiting for 5 minutes...\n");
                         TimeUnit.MINUTES.sleep(5);
                         
->>>>>>> fe1cd1cd4261843add86dd2a3e4f487c5d26f713
                     } catch (InterruptedException e) {
                         System.out.println(e);
                     }
