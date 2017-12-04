@@ -47,14 +47,14 @@ public class HStest {
                     + "10 for embedded sig with text tags\n"
                     + "11 to update the callback url of your app\n"
                     + "12 to get a signature request object response\n"
-                    + "13 to trigger a loop where every 5 minutes, a signature request is generated\n"
+                    + "13 to trigger a loop where every 20 seconds, a signature request is generated\n"
                     + "14 to create a new API App with White Labeling\n"
                     + "15 to check if an account is valid for oauth\n"
                     + "or 0 to exit: ");
             
-            String localFile = "/Users/alexgriffen/NetBeansProjects/HelloSignTest/nda.pdf";
-            String localTextTagsFile = "/Users/alexgriffen/NetbeansProjects/HelloSignTest/TestingTextTagsvisible_signer0.pdf";
-            String localLogo = "/Users/alexgriffen/NetBeansProjects/HelloSignTest/transparent_image.png";
+            String localFile = "/home/ec2-user/java console/javaconsole-HelloSignAPI/nda.pdf";
+            String localTextTagsFile = "/home/ec2-user/java console/javaconsole-HelloSignAPI/TestingTextTagsvisible_signer0.pdf";
+            String localLogo = "/home/ec2-user/java console/javaconsole-HelloSignAPI/transparent_image.png";
             
             BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
             String options = bufferRead.readLine();
@@ -472,8 +472,8 @@ public class HStest {
                         LocalDateTime now = LocalDateTime.now();
                         System.out.println(dtf.format(now)); //2016/11/16 12:08:43
 
-                        System.out.println("\nWaiting for 5 minutes...\n");
-                        TimeUnit.MINUTES.sleep(5);
+                        System.out.println("\nWaiting for 20 seconds...\n");
+                        TimeUnit.SECONDS.sleep(20);
                     } catch (InterruptedException e) {
                         System.out.println(e);
                     }
