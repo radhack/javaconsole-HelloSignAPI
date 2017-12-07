@@ -20,6 +20,9 @@ import org.json.JSONException;
 import java.util.concurrent.TimeUnit;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  *
@@ -50,15 +53,16 @@ public class HStest {
                     + "13 to trigger a loop where every 20 seconds, a signature request is generated\n"
                     + "14 to create a new API App with White Labeling\n"
                     + "15 to check if an account is valid for oauth\n"
+                    + "16 to hit /template/list endpoint\n"
                     + "or 0 to exit: ");
-            
+
             String localFile = "/home/ec2-user/java console/javaconsole-HelloSignAPI/nda.pdf";
             String localTextTagsFile = "/home/ec2-user/java console/javaconsole-HelloSignAPI/TestingTextTagsvisible_signer0.pdf";
             String localLogo = "/home/ec2-user/java console/javaconsole-HelloSignAPI/transparent_image.png";
-            
+
             BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
             String options = bufferRead.readLine();
-            
+
             if (options.equals("1")) {
                 // this GETs the account object
                 System.out.print(apikey + "\n");
@@ -240,7 +244,6 @@ public class HStest {
                 // embedded signing with template
                 // TODO make this take in a template id and boolean with custom fields
                 // SignatureResponse signatureResponse = newSigantureResponse();
-                
                 // commenting out this section to test redirectUrl
                 TemplateSignatureRequest request = new TemplateSignatureRequest();
                 request.setTemplateId("5f15711bf170531c5336528a1a4cbad2bd10da41");
@@ -306,7 +309,6 @@ public class HStest {
 //                System.out.println(response.toString());
 //
 //                System.out.print("Signature Request sent! \n");
-
             } else if (options.equals("9")) {
 
                 // nonembedded signing with template
@@ -476,14 +478,12 @@ public class HStest {
 
                         i++;
                         System.out.println(i + " is the number of times this has run");
-                        
+
                         System.out.println("\nWaiting for 20 seconds...\n");
                         TimeUnit.SECONDS.sleep(20);
 
-                                               
 //                        System.out.println("\nWaiting for 5 minutes...\n");
 //                        TimeUnit.MINUTES.sleep(5);
-                        
                     } catch (InterruptedException e) {
                         System.out.println(e);
                     }
@@ -537,6 +537,38 @@ public class HStest {
                     System.out.println("\nThat account is valid.\n Please use this link to authorize oAuth:\n https://app.hellosign.com/oauth/authorize?response_type=code&client_id=2d9e5cbc5d888bef3253c0489d6851f5&state=somethingrandom");
 
                 }
+
+            } else if (options.equals("16")) {
+                // GET /template list response
+
+//                TemplateList templateList = (new HelloSignClient("")).getTemplates();
+//                URL url = new URL("https://:%40api.hellosign.com/v3/template/list");
+//                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+//                con.setRequestMethod("GET");
+//                int status = con.getResponseCode();
+//                BufferedReader in = new BufferedReader(
+//                    new InputStreamReader(con.getInputStream()));
+//                String inputLine;
+//                StringBuffer content = new StringBuffer();
+//                while ((inputLine = in.readLine()) != null) {
+//                    content.append(inputLine);
+//                }
+//                in.close();
+//                con.disconnect();
+                OkHttpClient client = new OkHttpClient();
+
+                Request request = new Request.Builder()
+                        .url("https://api.hellosign.com/v3/template/list")
+                        .get()
+                        .addHeader("authorization", "Basic =")
+                        .addHeader("cache-control", "no-cache")
+                        .build();
+
+                Response response = client.newCall(request).execute();
+
+//                System.out.print("\n" + status + "\n");
+                System.out.print(response.body().string());
+                System.out.print("\n");
 
             } else if (options.equals("0")) {
                 break;
