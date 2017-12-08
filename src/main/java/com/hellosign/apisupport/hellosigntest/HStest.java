@@ -12,6 +12,7 @@ import com.hellosign.sdk.resource.TemplateSignatureRequest;
 import com.hellosign.sdk.resource.UnclaimedDraft;
 import com.hellosign.sdk.resource.support.CustomField;
 import com.hellosign.sdk.resource.support.Signature;
+import com.hellosign.sdk.resource.support.TemplateList;
 import com.hellosign.sdk.resource.support.types.UnclaimedDraftType;
 
 import java.io.*;
@@ -26,9 +27,8 @@ import okhttp3.Response;
 
 /**
  *
- * @author alexgriffen NOTE TO SELF: you must be in /target to run this java -cp
- * HelloSignTest-1.0-SNAPSHOT-jar-with-dependencies.jar
- * com.hellosign.apisupport.hellosigntest.HStest
+ * @author alexgriffen NOTE TO SELF: you must be in /target to run this
+ * java -cp  HelloSignTest-1.0-SNAPSHOT-jar-with-dependencies.jar com.hellosign.apisupport.hellosigntest.HStest
  */
 public class HStest {
 
@@ -541,7 +541,7 @@ public class HStest {
             } else if (options.equals("16")) {
                 // GET /template list response
 
-//                TemplateList templateList = (new HelloSignClient("")).getTemplates();
+                TemplateList templateList = (new HelloSignClient(apikey)).getTemplates();
 //                URL url = new URL("https://:%40api.hellosign.com/v3/template/list");
 //                HttpURLConnection con = (HttpURLConnection) url.openConnection();
 //                con.setRequestMethod("GET");
@@ -554,20 +554,21 @@ public class HStest {
 //                    content.append(inputLine);
 //                }
 //                in.close();
-//                con.disconnect();
-                OkHttpClient client = new OkHttpClient();
-
-                Request request = new Request.Builder()
-                        .url("https://api.hellosign.com/v3/template/list")
-                        .get()
-                        .addHeader("authorization", "Basic =")
-                        .addHeader("cache-control", "no-cache")
-                        .build();
-
-                Response response = client.newCall(request).execute();
-
-//                System.out.print("\n" + status + "\n");
-                System.out.print(response.body().string());
+////                con.disconnect();
+//                OkHttpClient client = new OkHttpClient();
+//
+//                Request request = new Request.Builder()
+//                        .url("https://api.hellosign.com/v3/template/list")
+//                        .get()
+//                        .addHeader("authorization", "Basic =")
+//                        .addHeader("cache-control", "no-cache")
+//                        .build();
+//
+//                Response response = client.newCall(request).execute();
+//
+////                System.out.print("\n" + status + "\n");
+//                System.out.print(response.body().string());
+                System.out.print("\n" + templateList);
                 System.out.print("\n");
 
             } else if (options.equals("0")) {
