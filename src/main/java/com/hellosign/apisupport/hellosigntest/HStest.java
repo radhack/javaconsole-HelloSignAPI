@@ -27,8 +27,9 @@ import okhttp3.Response;
 
 /**
  *
- * @author alexgriffen NOTE TO SELF: you must be in /target to run this
- * java -cp  HelloSignTest-1.0-SNAPSHOT-jar-with-dependencies.jar com.hellosign.apisupport.hellosigntest.HStest
+ * @author alexgriffen NOTE TO SELF: you must be in /target to run this java -cp
+ * HelloSignTest-1.0-SNAPSHOT-jar-with-dependencies.jar
+ * com.hellosign.apisupport.hellosigntest.HStest
  */
 public class HStest {
 
@@ -54,6 +55,7 @@ public class HStest {
                     + "14 to create a new API App with White Labeling\n"
                     + "15 to check if an account is valid for oauth\n"
                     + "16 to hit /template/list endpoint\n"
+                    + "17 to trigger an error response to GET /sign_url call\n"
                     + "or 0 to exit: ");
 
             String localFile = "/home/ec2-user/java console/javaconsole-HelloSignAPI/nda.pdf";
@@ -361,8 +363,8 @@ public class HStest {
 
                 SignatureRequest newRequest = (SignatureRequest) client.createEmbeddedRequest(embedReq);
 
-// get the signature_id of the first signer
-// hardcoded because I'd rather not take the time to do this programmaticaly
+                // get the signature_id of the first signer
+                // hardcoded because I'd rather not take the time to do this programmaticaly
                 Signature sigidFirstSigner = newRequest.getSignature("jack@example.com", "Jack");
 
                 String signID = sigidFirstSigner.getId();
@@ -570,6 +572,19 @@ public class HStest {
 //                System.out.print(response.body().string());
                 System.out.print("\n" + templateList);
                 System.out.print("\n");
+
+            } else if (options.equals("17")) {
+                HelloSignClient client = new HelloSignClient(apikey);
+
+                String signatureId = "50e3542f738adfa7ddd4cbd4c00d2a8ab6e4194b";
+
+                try {
+                    EmbeddedResponse response = client.getEmbeddedSignUrl(signatureId);
+//                    String responseCode = response.getStatus();
+                    System.out.print(response + "\n this is the response");
+                } catch (HelloSignException ex) {
+                    System.out.print("\nthis is the exeption http code " + ex.getHttpCode());
+                }
 
             } else if (options.equals("0")) {
                 break;
