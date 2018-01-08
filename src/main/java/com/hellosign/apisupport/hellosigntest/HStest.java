@@ -27,9 +27,7 @@ import okhttp3.Response;
 
 /**
  *
- * @author alexgriffen NOTE TO SELF: you must be in /target to run this java -cp
- * HelloSignTest-1.0-SNAPSHOT-jar-with-dependencies.jar
- * com.hellosign.apisupport.hellosigntest.HStest
+ * @author alexgriffen NOTE TO SELF: you must be in /target to run this java -cp HelloSignTest-1.0-SNAPSHOT-jar-with-dependencies.jar com.hellosign.apisupport.hellosigntest.HStest
  */
 public class HStest {
 
