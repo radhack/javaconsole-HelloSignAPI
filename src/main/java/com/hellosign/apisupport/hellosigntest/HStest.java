@@ -13,6 +13,7 @@ import com.hellosign.sdk.resource.UnclaimedDraft;
 import com.hellosign.sdk.resource.support.CustomField;
 import com.hellosign.sdk.resource.support.Signature;
 import com.hellosign.sdk.resource.support.TemplateList;
+import com.hellosign.sdk.resource.support.WhiteLabelingOptions;
 import com.hellosign.sdk.resource.support.types.UnclaimedDraftType;
 
 import java.io.*;
@@ -24,10 +25,13 @@ import java.time.format.DateTimeFormatter;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.json.JSONObject;
 
 /**
  *
- * @author alexgriffen NOTE TO SELF: you must be in /target to run this java -cp HelloSignTest-1.0-SNAPSHOT-jar-with-dependencies.jar com.hellosign.apisupport.hellosigntest.HStest
+ * @author alexgriffen NOTE TO SELF: you must be in /target to run this java -cp
+ * HelloSignTest-1.0-SNAPSHOT-jar-with-dependencies.jar
+ * com.hellosign.apisupport.hellosigntest.HStest
  */
 public class HStest {
 
@@ -499,7 +503,6 @@ public class HStest {
                 app.setCustomLogo(new File(localLogo));
 //                app.setHeaderBackgroundColor("#00b3e6");
                 app.setPrimaryButtonColor("#00b3e6");
-                app.setPrimaryButtonTextColor("#ffffff");
                 app.setDomain("ngrok.io");
                 LocalDateTime now = LocalDateTime.now();
                 app.setName(now + " is the name");
@@ -515,14 +518,33 @@ public class HStest {
                 ApiApp newApp = (ApiApp) client.createApiApp(app);
 
                 String client_id = newApp.getClientId();
+                String primaryButton = newApp.getWhiteLabelingOptions().getPrimaryButtonColor();
 
-                System.out.println(client_id + " is the new client_id\n\n");
+                System.out.println(client_id + " is the new client_id and " + primaryButton + " is the new primary button color\n");
 
-                System.out.println("\nEnter 1 if you'd like to delete the new client_id:\n");
-                BufferedReader keepAp = new BufferedReader(new InputStreamReader(System.in));
-                String keepApOrDelete = keepAp.readLine();
-                if (keepApOrDelete.equals("1")) {
+                System.out.println("\nEnter 1 if you'd like to delete the new client_id, or\n2 if you'd like to update the white_labeling_options");
+                BufferedReader keepOrUpdate = new BufferedReader(new InputStreamReader(System.in));
+                String keepAOrDeleteOrUpdate = keepOrUpdate.readLine();
+                if (keepAOrDeleteOrUpdate.equals("1")) {
                     client.deleteApiApp(client_id);
+                } else if (keepAOrDeleteOrUpdate.equals("2")) {
+                    WhiteLabelingOptions updatedOptions = new WhiteLabelingOptions();
+                    updatedOptions.setPrimaryButtonTextColor("#ffffff");
+                    updatedOptions.setHeaderBackgroundColor("#14213E");
+                    updatedOptions.setPrimaryButtonColor("#C3A86A");
+                    updatedOptions.setPrimaryButtonTextColor("#0e1a34");
+                    updatedOptions.setPrimaryButtonHoverColor("#ffffff");
+                    updatedOptions.setSecondaryButtonColor("#ffffff");
+                    updatedOptions.setSecondaryButtonTextColor("#0e1a34");
+                    updatedOptions.setSecondaryButtonHoverColor("#0e1a34");
+                    updatedOptions.setSecondaryButtonTextHoverColor("#ffffff");
+                    updatedOptions.setLinkColor("#0e1a34");
+                    updatedOptions.setTextColor1("#464646");
+                    newApp.setWhiteLabelingOptions(updatedOptions);
+                    ApiApp updatedAppRes = client.updateApiApp(newApp);
+
+                    String primaryButtonUpdated = updatedAppRes.getWhiteLabelingOptions().getPrimaryButtonColor();
+                    System.out.println(primaryButtonUpdated + " should equal #C3A86A and should be different from the first app's response above\n");
                 }
 
             } else if (options.equals("15")) {
