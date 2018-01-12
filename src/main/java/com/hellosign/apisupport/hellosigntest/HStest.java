@@ -60,9 +60,10 @@ public class HStest {
                     + "17 to trigger an error response to GET /sign_url call\n"
                     + "or 0 to exit: ");
 
-            String localFile = "/home/ec2-user/java console/javaconsole-HelloSignAPI/nda.pdf";
-            String localTextTagsFile = "/home/ec2-user/java console/javaconsole-HelloSignAPI/TestingTextTagsvisible_signer0.pdf";
-            String localLogo = "/home/ec2-user/java console/javaconsole-HelloSignAPI/transparent_image.png";
+            String localFile = "/Users/alexgriffen/NetBeansProjects/HelloSignTest/nda.pdf";
+            String localFile1 = "/Users/alexgriffen/NetBeansProjects/HelloSignTest/TestingTextTagsvisible_signer0.pdf";
+            String localTextTagsFile = "/Users/alexgriffen/NetBeansProjects/HelloSignTest/TestingTextTagsvisible_signer0.pdf";
+            String localLogo = "/Users/alexgriffen/NetBeansProjects/HelloSignTest/transparent_image.png";
 
             BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
             String options = bufferRead.readLine();
@@ -99,6 +100,8 @@ public class HStest {
 
                 //request.addFile(new File(localFile));
                 request.addFile(new File(localFile));
+                request.addFile(new File(localFile1));
+                request.addFile(new File(localLogo));
                 // Prints the JSON response to the console
                 SignatureRequest response = client.sendSignatureRequest(request);
 
