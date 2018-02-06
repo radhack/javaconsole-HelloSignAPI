@@ -11,10 +11,14 @@ import com.hellosign.sdk.resource.TemplateDraft;
 import com.hellosign.sdk.resource.TemplateSignatureRequest;
 import com.hellosign.sdk.resource.UnclaimedDraft;
 import com.hellosign.sdk.resource.support.CustomField;
+import com.hellosign.sdk.resource.support.Document;
+import com.hellosign.sdk.resource.support.FormField;
 import com.hellosign.sdk.resource.support.Signature;
 import com.hellosign.sdk.resource.support.TemplateList;
 import com.hellosign.sdk.resource.support.WhiteLabelingOptions;
+import com.hellosign.sdk.resource.support.types.FieldType;
 import com.hellosign.sdk.resource.support.types.UnclaimedDraftType;
+import com.hellosign.sdk.resource.support.types.ValidationType;
 
 import java.io.*;
 import java.net.URLEncoder;
@@ -29,10 +33,10 @@ import org.json.JSONObject;
 
 /**
  *
- * @author alexgriffen NOTE TO SELF: you must be in /target to run this java -cp
- * HelloSignTest-1.0-SNAPSHOT-jar-with-dependencies.jar
- * com.hellosign.apisupport.hellosigntest.HStest
+ * @author alexgriffen NOTE TO SELF: you must be in /target to run this
+ * java -cp HelloSignTest-1.0-SNAPSHOT-jar-with-dependencies.jar com.hellosign.apisupport.hellosigntest.HStest
  */
+
 public class HStest {
 
     public static void main(String[] args) throws HelloSignException, IOException, JSONException {
@@ -58,6 +62,7 @@ public class HStest {
                     + "15 to check if an account is valid for oauth\n"
                     + "16 to hit /template/list endpoint\n"
                     + "17 to trigger an error response to GET /sign_url call\n"
+                    + "18 for embedded signing with form_fields_per_document\n"
                     + "or 0 to exit: ");
 
             String localFile = "/Users/alexgriffen/NetBeansProjects/HelloSignTest/nda.pdf";
@@ -353,6 +358,7 @@ public class HStest {
                 System.out.print(newRequest + "\n");
 
             } else if (options.equals("10")) {
+                //embedded signing with text tags
                 SignatureRequest request = new SignatureRequest();
                 request.addFile(new File(localTextTagsFile)); //one signer in this case, so my PDF has tags for signer1 only
                 request.setSubject("My First embedded signature request");
@@ -609,6 +615,50 @@ public class HStest {
                     System.out.print("\nthis is the exeption http code " + ex.getHttpCode());
                 }
 
+            } else if (options.equals("18")) { 
+            //embedded signature request with form_fields_per_docucment
+            SignatureRequest request = new SignatureRequest();
+                Document doc = new Document();
+                doc.setFile(new File(localFile)); //one signer in this case, so my PDF has tags for signer1 only
+                request.setSubject("java - form fields per document");
+                request.setMessage("Awesome, right?");
+                request.addSigner("jack@example.com", "Jack");
+                request.setTestMode(true);
+                FormField textField = new FormField();
+                textField.setType(FieldType.text);
+                textField.setName("First Name"); // Displayed to the signer as the "Field Label"
+                textField.setValidationType(ValidationType.letters_only);
+                textField.setSigner(0); // Signer indexes are zero-based
+                textField.setHeight(25);
+                textField.setWidth(300);
+                textField.setIsRequired(true);
+                textField.setPage(1); // 1-based indexing, relative to the document
+                textField.setX(100);
+                textField.setY(100);
+
+                doc.addFormField(textField);
+                request.addDocument(doc);
+
+                EmbeddedRequest embedReq = new EmbeddedRequest(clientid, request);
+
+                HelloSignClient client = new HelloSignClient(apikey);
+
+                SignatureRequest newRequest = (SignatureRequest) client.createEmbeddedRequest(embedReq);
+
+                // get the signature_id of the first signer
+                // hardcoded because I'd rather not take the time to do this programmaticaly
+                Signature sigidFirstSigner = newRequest.getSignature("jack@example.com", "Jack");
+
+                String signID = sigidFirstSigner.getId();
+                System.out.print(signID + "\n");
+                System.out.print("Embedded Signature Request created! \n");
+
+                EmbeddedResponse embRequest = client.getEmbeddedSignUrl(signID);
+                String signUrl = embRequest.getSignUrl();
+                System.out.println(signUrl + "\n");
+                String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(signUrl, "UTF-8") + "&client_id=" + clientid;
+                System.out.println(url + "\n");
+            
             } else if (options.equals("0")) {
                 break;
             } else {
