@@ -19,7 +19,6 @@ import com.hellosign.sdk.resource.support.WhiteLabelingOptions;
 import com.hellosign.sdk.resource.support.types.FieldType;
 import com.hellosign.sdk.resource.support.types.UnclaimedDraftType;
 import com.hellosign.sdk.resource.support.types.ValidationType;
-
 import java.io.*;
 import java.net.URLEncoder;
 import org.json.JSONException;
