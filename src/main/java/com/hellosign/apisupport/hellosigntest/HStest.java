@@ -195,8 +195,9 @@ public class HStest {
                 HelloSignClient client = new HelloSignClient(apikey);
                 UnclaimedDraft responseDraft = (UnclaimedDraft) client.createEmbeddedRequest(embedReq);
                 String claimUrl = responseDraft.getClaimUrl();
+                String signatureRequestId = responseDraft.getSignatureRequestId();
                 String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(claimUrl, "UTF-8") + "&client_id=" + clientid;
-                System.out.print(url + "\n");
+                System.out.print(url + "\n" + signatureRequestId + "\n");
 
             } else if (options.equals("6")) {
 
