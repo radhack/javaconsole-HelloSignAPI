@@ -25,17 +25,20 @@ import org.json.JSONException;
 import java.util.concurrent.TimeUnit;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import okhttp3.Credentials;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import org.json.JSONObject;
 
 /**
  *
- * @author alexgriffen NOTE TO SELF: you must be in /target to run this
- * java -cp HelloSignTest-1.0-SNAPSHOT-jar-with-dependencies.jar com.hellosign.apisupport.hellosigntest.HStest
+ * @author alexgriffen NOTE TO SELF: you must be in /target to run this java -cp
+ * HelloSignTest-1.0-SNAPSHOT-jar-with-dependencies.jar
+ * com.hellosign.apisupport.hellosigntest.HStest
  */
-
 public class HStest {
 
     public static void main(String[] args) throws HelloSignException, IOException, JSONException {
@@ -62,11 +65,13 @@ public class HStest {
                     + "16 to hit /template/list endpoint\n"
                     + "17 to trigger an error response to GET /sign_url call\n"
                     + "18 for embedded signing with form_fields_per_document\n"
+                    + "19 to use okhttp3 with unclaimed draft with template\n"
                     + "or 0 to exit: ");
 
             String localFile = "/Users/alexgriffen/NetBeansProjects/HelloSignTest/nda.pdf";
             String localFile1 = "/Users/alexgriffen/NetBeansProjects/HelloSignTest/TestingTextTagsvisible_signer0.pdf";
             String localTextTagsFile = "/Users/alexgriffen/NetBeansProjects/HelloSignTest/TestingTextTagsvisible_signer0.pdf";
+            String signer1 = "/Users/alexgriffen/NetBeansProjects/HelloSignTest/editable_signer_text_tag.pdf";
             String localLogo = "/Users/alexgriffen/NetBeansProjects/HelloSignTest/transparent_image.png";
 
             BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
@@ -183,6 +188,8 @@ public class HStest {
                 SignatureRequest sigReq = new SignatureRequest();
                 sigReq.setTestMode(true);
                 sigReq.addFile(new File(localFile));
+//                int docs = array[localFile];
+//                sigReq.setDocuments();
 
                 UnclaimedDraft draft = new UnclaimedDraft(sigReq, UnclaimedDraftType.request_signature);
                 draft.setIsForEmbeddedSigning(true);
@@ -205,24 +212,30 @@ public class HStest {
                 // aka embedded requesting with template
                 TemplateSignatureRequest tempsigReq = new TemplateSignatureRequest();
                 tempsigReq.setTestMode(true);
-                System.out.println("\nEnter the template id:\n");
-                BufferedReader bufferReadtid = new BufferedReader(new InputStreamReader(System.in));
-                String templateid = bufferReadtid.readLine();
+//                System.out.println("\nEnter the template id:\n");
+//                BufferedReader bufferReadtid = new BufferedReader(new InputStreamReader(System.in));
+//                String templateid = bufferReadtid.readLine();
+                String templateid = "760cef8d837e9762e1f2c3f0bcfd947fb1f3e492";
                 tempsigReq.addTemplateId(templateid);
-                tempsigReq.setCC("Lawyer", "alex+lawyer@hellosign.com");
-                tempsigReq.setSigner("Tenant1", "alex+tenant1@hellosign.com", "Alex JAVA Tenant1");
-                tempsigReq.setSigner("Signer2", "alex+signer2@hellosign.com", "Alex JAVA Signer2");
+//                tempsigReq.setCC("Lawyer", "aleahahahahx+lawyer@hellosign.com");
+                tempsigReq.setSigner("Role0", "alex+tenant1@hellosign.com", "Alex JAVA Tenant1");
+//                tempsigReq.setSigner("Role2", "alex+signer2@hellosign.com", "Alex JAVA Signer2");
                 // tempsigReq.setOrderMatters(true);
+                tempsigReq.addFile(new File(signer1));
+//                tempsigReq.setUseTextTags(true);
 
                 UnclaimedDraft draft = new UnclaimedDraft(tempsigReq, UnclaimedDraftType.request_signature);
                 draft.setIsForEmbeddedSigning(true);
+                draft.setUseTextTags(true);
                 draft.setRequesterEmail("jolene@example.com");
+//                draft.addFile(new File(localTextTagsFile));
 
                 // String clientId = "d7219512693825facdd9241f458decf2";
                 // removint this for now, and using the getenv("HS_CLIENT_ID_PROD") instead
                 EmbeddedRequest embedReq = new EmbeddedRequest(clientid, draft);
 
                 HelloSignClient client = new HelloSignClient(apikey);
+                System.out.print(apikey + "\n");
                 UnclaimedDraft responseDraft = (UnclaimedDraft) client.createEmbeddedRequest(embedReq);
                 String claimUrl = responseDraft.getClaimUrl();
                 String signatureID = responseDraft.getSignatureRequestId();
@@ -615,9 +628,9 @@ public class HStest {
                     System.out.print("\nthis is the exeption http code " + ex.getHttpCode());
                 }
 
-            } else if (options.equals("18")) { 
-            //embedded signature request with form_fields_per_docucment
-            SignatureRequest request = new SignatureRequest();
+            } else if (options.equals("18")) {
+                //embedded signature request with form_fields_per_docucment
+                SignatureRequest request = new SignatureRequest();
                 Document doc = new Document();
                 doc.setFile(new File(localFile)); //one signer in this case, so my PDF has tags for signer1 only
                 request.setSubject("java - form fields per document");
@@ -658,7 +671,28 @@ public class HStest {
                 System.out.println(signUrl + "\n");
                 String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(signUrl, "UTF-8") + "&client_id=" + clientid;
                 System.out.println(url + "\n");
-            
+
+            } else if (options.equals("19")) {
+                OkHttpClient client = new OkHttpClient();
+
+                MediaType mediaType = MediaType.parse("multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW");
+                RequestBody body = RequestBody.create(mediaType, "------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"client_id\"\r\n\r\nd7219512693825facdd9241f458decf2\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"template_id\"\r\n\r\n5f5650f1cbfd497393cfa426d7d8d81e2a62a1f4\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"test_mode\"\r\n\r\n1\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"requester_email_address\"\r\n\r\nalex+postman@hellosign.com\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"is_for_embedded_signing\"\r\n\r\n1\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"signers[Role1][name]\"\r\n\r\nSigner 1 Bob\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"signers[Role1][email_address]\"\r\n\r\nsigner1_bob@bob.com\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"signers[Role2][name]\"\r\n\r\nSigner 2 Bob\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"signers[Role2][email_address]\"\r\n\r\nsigner2_bob@bob.com\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--");
+                Request request = new Request.Builder()
+                        .url("https://api.hellosign.com/v3/unclaimed_draft/create_embedded_with_template")
+                        .post(body)
+                        .addHeader("content-type", "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW")
+                        .addHeader("Cache-Control", "no-cache")
+                        .addHeader("Authorization", Credentials.basic(apikey, ""))
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    String jsonData = response.body().string();
+                    System.out.print(jsonData + " is the whole response\n");
+                    JSONObject Jobject = new JSONObject(jsonData);
+                    String claim_url = Jobject.getJSONObject("unclaimed_draft").getString("claim_url");
+                    System.out.print(claim_url + " is the claim_url\n");
+                }
+
             } else if (options.equals("0")) {
                 break;
             } else {
