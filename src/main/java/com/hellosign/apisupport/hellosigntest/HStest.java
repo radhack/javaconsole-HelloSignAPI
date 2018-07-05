@@ -31,6 +31,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.apache.http.HttpResponse;
 import org.json.JSONObject;
 
 /**
@@ -59,13 +60,14 @@ public class HStest {
                     + "10 for embedded sig with text tags\n"
                     + "11 to update the callback url of your app\n"
                     + "12 to get a signature request object response\n"
-                    + "13 to trigger a loop where every 20 seconds, a signature request is generated\n"
+                    + "13 to trigger a loop where every few seconds, a signature request is generated from a template\n"
                     + "14 to create a new API App with White Labeling\n"
                     + "15 to check if an account is valid for oauth\n"
                     + "16 to hit /template/list endpoint\n"
                     + "17 to trigger an error response to GET /sign_url call\n"
                     + "18 for embedded signing with form_fields_per_document\n"
                     + "19 to use okhttp3 with unclaimed draft with template\n"
+                    + "20 to trigger a loop where every few seconds, a signature request is generated from a template\n"
                     + "or 0 to exit: ");
 
             String localFile = "/Users/alexgriffen/NetBeansProjects/HelloSignTest/nda.pdf";
@@ -215,24 +217,26 @@ public class HStest {
 //                System.out.println("\nEnter the template id:\n");
 //                BufferedReader bufferReadtid = new BufferedReader(new InputStreamReader(System.in));
 //                String templateid = bufferReadtid.readLine();
-                String templateid = "760cef8d837e9762e1f2c3f0bcfd947fb1f3e492";
+                String templateid = "4fbf53c4c064d5f3cd59c79a4fd8829c95e8f6ea";
                 tempsigReq.addTemplateId(templateid);
 //                tempsigReq.setCC("Lawyer", "aleahahahahx+lawyer@hellosign.com");
-                tempsigReq.setSigner("Role0", "alex+tenant1@hellosign.com", "Alex JAVA Tenant1");
-//                tempsigReq.setSigner("Role2", "alex+signer2@hellosign.com", "Alex JAVA Signer2");
+//                tempsigReq.setSigner("Role0", "alex+tenant1@hellosign.com", "Alex JAVA Tenant0");
+                tempsigReq.setSigner("Role1", "alex+signer2@hellosign.com", "Alex JAVA Signer1");
+                tempsigReq.setSigner("Role2", "alex+signer2@hellosign.com", "Alex JAVA Signer2");
                 // tempsigReq.setOrderMatters(true);
-                tempsigReq.addFile(new File(signer1));
-//                tempsigReq.setUseTextTags(true);
+                tempsigReq.addFile(new File(localFile1));
 
+//                tempsigReq.setUseTextTags(true);
                 UnclaimedDraft draft = new UnclaimedDraft(tempsigReq, UnclaimedDraftType.request_signature);
                 draft.setIsForEmbeddedSigning(true);
-                draft.setUseTextTags(true);
+//                draft.setUseTextTags(true);
                 draft.setRequesterEmail("jolene@example.com");
 //                draft.addFile(new File(localTextTagsFile));
 
-                // String clientId = "d7219512693825facdd9241f458decf2";
+//                 String clientId = "d7219512693825facdd9241f458decf2";
                 // removint this for now, and using the getenv("HS_CLIENT_ID_PROD") instead
                 EmbeddedRequest embedReq = new EmbeddedRequest(clientid, draft);
+                embedReq.addFile(new File(localFile1));
 
                 HelloSignClient client = new HelloSignClient(apikey);
                 System.out.print(apikey + "\n");
@@ -436,67 +440,149 @@ public class HStest {
                 System.out.println(filesUrl + "\n");
 
             } else if (options.equals("13")) {
-
+                int i = 0;
                 while (true) { //just an always-true statement to keep the while loop running
-                    int i = 0;
                     try {
                         System.out.println("Starting loop. Enter ctrl+c to break.\n");
-//                        BufferedReader bufferRead1 = new BufferedReader(new InputStreamReader(System.in));
-//                        System.out.println(bufferRead1);
-//                        String breakOrNo = bufferRead1.readLine();
-//                        if (breakOrNo.equals("1")) {
-//                            break;
-//                        }
-//                  commenting all of that out - not sure how to allow user to input but also keep the loop running
+                        TemplateSignatureRequest request = new TemplateSignatureRequest();
+                        request.setTemplateId("8b52650dbde7846df1287de6617803cca7eb6bde");
+                        request.setSubject("Purchase Order");
+                        request.setMessage("Glad we could come to an agreement.");
 
-                        //embedded signature request
-                        SignatureRequest request = new SignatureRequest();
-                        request.addFile(new File(localFile));
-                        request.setSubject("My First embedded signature request"); //lol I did my first already, so this hardcoded 'subject' is a LIE and you'll never know
-                        // muahhhhhh haaa haaa 
-                        // ^ evil laugh
+//                        CustomField manager_name = new CustomField();
+//                        manager_name.setValue("Bob Bobson");
+//                        manager_name.setName("manager_name");
+//                        request.addCustomField(manager_name);
+//
+//                        CustomField customer_name = new CustomField();
+//                        customer_name.setValue("Frank Bobson");
+//                        customer_name.setName("customer_name");
+//                        request.addCustomField(customer_name);
+//
+//                        CustomField account_name = new CustomField();
+//                        account_name.setValue("Account Bobson");
+//                        account_name.setName("account_name");
+//                        request.addCustomField(account_name);
+//
+//                        CustomField street = new CustomField();
+//                        street.setValue("Account Bobson");
+//                        street.setName("street");
+//                        request.addCustomField(street);
+//
+//                        CustomField city = new CustomField();
+//                        city.setValue("City Bobson");
+//                        city.setName("city");
+//                        request.addCustomField(city);
+//
+//                        CustomField state = new CustomField();
+//                        state.setValue("State Bobson");
+//                        state.setName("state");
+//                        request.addCustomField(state);
+//
+//                        CustomField zip = new CustomField();
+//                        zip.setValue("zip Bobson");
+//                        zip.setName("zip");
+//                        request.addCustomField(zip);
+//
+//                        CustomField phone = new CustomField();
+//                        phone.setValue("phone Bobson");
+//                        phone.setName("phone");
+//                        request.addCustomField(phone);
+//
+//                        CustomField a1 = new CustomField();
+//                        a1.setValue("phone Bobson");
+//                        a1.setName("a1");
+//                        request.addCustomField(a1);
+//
+//                        CustomField a2 = new CustomField();
+//                        a2.setValue("phone Bobson");
+//                        a2.setName("a2");
+//                        request.addCustomField(a2);
+//
+//                        CustomField a3 = new CustomField();
+//                        a3.setValue("phone Bobson");
+//                        a3.setName("a3");
+//                        request.addCustomField(a3);
+//
+//                        CustomField a4 = new CustomField();
+//                        a4.setValue("phone Bobson");
+//                        a4.setName("a4");
+//                        request.addCustomField(a4);
+//
+//                        CustomField a5 = new CustomField();
+//                        a5.setValue("phone Bobson");
+//                        a5.setName("a5");
+//                        request.addCustomField(a5);
+//
+//                        CustomField a6 = new CustomField();
+//                        a6.setValue("phone Bobson");
+//                        a6.setName("a6");
+//                        request.addCustomField(a6);
+//
+//                        CustomField a7 = new CustomField();
+//                        a7.setValue("phone Bobson");
+//                        a7.setName("a7");
+//                        request.addCustomField(a7);
+//
+//                        CustomField chk = new CustomField();
+//                        chk.setValue("true");
+//                        chk.setName("chk");
+//                        request.addCustomField(chk);
+//
+//                        CustomField chk1 = new CustomField();
+//                        chk1.setValue("true");
+//                        chk1.setName("chk1");
+//                        request.addCustomField(chk1);
+//
+//                        CustomField chk2 = new CustomField();
+//                        chk2.setValue("true");
+//                        chk2.setName("chk2");
+//                        request.addCustomField(chk2);
+//
+//                        CustomField chk3 = new CustomField();
+//                        chk3.setValue("true");
+//                        chk3.setName("chk3");
+//                        request.addCustomField(chk3);
 
-                        request.setMessage("Awesome, right?");
-                        request.addSigner("jack@example.com", "Jack");
-                        request.addSigner("jill@example.com", "Jill");
-                        request.setTestMode(true);
+                        request.setSigner("Role2", "frank@example.com", "Frank Franksonridge");
+                        request.setSigner("Role3", "bob@example.com", "Bob Johnson");
+                        request.setSigner("Role4", "Susan@example.com", "Susan Franksonridge");
+                        request.setSigner("Role1", "Barbara@example.com", "Barbara Franksonridge");
 
-                        // String clientId = "d7219512693825facdd9241f458decf2";
-                        // EmbeddedRequest embedReq = new EmbeddedRequest(clientId, request);
-                        // leaving those two lines in case I want to make the clientID a choice later on
-                        // replacing the clientID below with the clientid String from getenv("HS_CLIENT_ID_PROD")
+//                        request.setTestMode(true);
+                        request.addMetadata("things", "rolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerole");
+                        request.addMetadata("lols", "rroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleole");
+                        request.addMetadata("things1", "rolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerole");
+                        request.addMetadata("lols1", "rolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerole");
+                        request.addMetadata("things2", "rolesdfsdf");
+                        request.addMetadata("lols2", "rosdfsdfasdflerolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdf");
+                        request.addMetadata("things3", "rofasdfsadflerolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdf");
+                        request.addMetadata("lols3", "rolerolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdf");
+                        request.addMetadata("things4", "rolerolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdf");
+                        request.addMetadata("lols4", "rolerolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolerolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolerolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdf");
+
+                        request.setRedirectUrl("https://google.com");
+
                         EmbeddedRequest embedReq = new EmbeddedRequest(clientid, request);
-
                         HelloSignClient client = new HelloSignClient(apikey);
                         SignatureRequest newRequest = (SignatureRequest) client.createEmbeddedRequest(embedReq);
-                        String requestId = newRequest.getId();
-                        System.out.print(requestId + " is the signature_request_id\n");
-                        // get the signature_id of the first signer
-                        // hardcoded because I'd rather not take the time to do this programmaticaly
-                        // was thinking of a for or while loop with "1" or "2" for the two different signers
-                        // and handle any entry that isn't "1" or "2"
-                        // but to make that make sense, I'd have to keep the user in the loop until they
-                        // had all of the URLs they wanted
-                        // and for this simple example, that's more effort than I'd like to spend
-                        // the webapp should include it though
-                        Signature sigidFirstSigner = newRequest.getSignature("jack@example.com", "Jack");
-                        String signID = sigidFirstSigner.getId();
-                        System.out.print(signID + " is the signature_id of the first signer\n");
-                        System.out.print("Embedded Signature Request created! \n");
+                        //
+                        Signature sigidRole1 = newRequest.getSignature("frank@example.com", "Frank Franksonridge");
+                        String signID = sigidRole1.getId();
+                        System.out.print(signID + "\n");
 
-                        System.out.println("\nWaiting for 10 seconds...\n");
-                        TimeUnit.SECONDS.sleep(10);
-
-                        Object filesUrl = client.getFilesUrl(requestId);
-                        System.out.println(filesUrl + "\n");
-
-                        SignatureRequest requestGet = client.getSignatureRequest(requestId);
-                        System.out.println(requestGet + "\n");
+                        System.out.println("\nWaiting for 2 seconds to get the sign_url\n");
+                        TimeUnit.SECONDS.sleep(2);
 
                         EmbeddedResponse embRequest = client.getEmbeddedSignUrl(signID);
                         String signUrl = embRequest.getSignUrl();
                         String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(signUrl, "UTF-8") + "&client_id=" + clientid;
+                        System.out.println(signUrl + "\n");
                         System.out.println(url + "\n");
+
+                        String id = newRequest.getId();
+                        System.out.print(id + " lol\n");
+                        System.out.print(newRequest + "\n");
 
                         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
                         LocalDateTime now = LocalDateTime.now();
@@ -505,9 +591,8 @@ public class HStest {
                         i++;
                         System.out.println(i + " is the number of times this has run");
 
-                        System.out.println("\nWaiting for 20 seconds...\n");
-                        TimeUnit.SECONDS.sleep(20);
-
+//                        System.out.println("\nWaiting for 2 seconds...\n");
+//                        TimeUnit.SECONDS.sleep(2);
 //                        System.out.println("\nWaiting for 5 minutes...\n");
 //                        TimeUnit.MINUTES.sleep(5);
                     } catch (InterruptedException e) {
@@ -673,24 +758,197 @@ public class HStest {
                 System.out.println(url + "\n");
 
             } else if (options.equals("19")) {
-                OkHttpClient client = new OkHttpClient();
+//                OkHttpClient client = new OkHttpClient();
+//
+//                RequestBody requestBody = new MultipartBuilder()
+//                        .type(MultipartBuilder.FORM)
+//                        .addFormDataPart("file", file.getName(),
+//                                RequestBody.create(MediaType.parse("text/csv"), file))
+//                        .addFormDataPart("some-field", "some-value")
+//                        .build();
+//                MediaType mediaType = MediaType.parse("multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW");
+//                RequestBody body = RequestBody.create(mediaType, "------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"client_id\"\r\n\r\nd7219512693825facdd9241f458decf2\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"template_id\"\r\n\r\n4fbf53c4c064d5f3cd59c79a4fd8829c95e8f6ea\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"test_mode\"\r\n\r\n1\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"requester_email_address\"\r\n\r\nalex+postman@hellosign.com\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"is_for_embedded_signing\"\r\n\r\n1\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"signers[Role1][name]\"\r\n\r\nnameRole1\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"signers[Role1][email_address]\"\r\n\r\nalex+role1@hellosign.com\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--");
+//                Request request = new Request.Builder()
+//                        .url("https://api.hellosign.com/v3/unclaimed_draft/create_embedded_with_template")
+//                        .post(body)
+//                        .addHeader("content-type", "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW")
+//                        .addHeader("Cache-Control", "no-cache")
+//                        .addHeader("Authorization", Credentials.basic(apikey, ""))
+//                        .build();
+//
+//                try (Response response = client.newCall(request).execute()) {
+//                    String jsonData = response.body().string();
+//                    System.out.print(jsonData + " is the whole response\n");
+//                    JSONObject Jobject = new JSONObject(jsonData);
+//                    String claim_url = Jobject.getJSONObject("unclaimed_draft").getString("claim_url");
+//                    System.out.print(claim_url + " is the claim_url\n");
+//                }
 
-                MediaType mediaType = MediaType.parse("multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW");
-                RequestBody body = RequestBody.create(mediaType, "------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"client_id\"\r\n\r\nd7219512693825facdd9241f458decf2\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"template_id\"\r\n\r\n5f5650f1cbfd497393cfa426d7d8d81e2a62a1f4\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"test_mode\"\r\n\r\n1\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"requester_email_address\"\r\n\r\nalex+postman@hellosign.com\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"is_for_embedded_signing\"\r\n\r\n1\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"signers[Role1][name]\"\r\n\r\nSigner 1 Bob\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"signers[Role1][email_address]\"\r\n\r\nsigner1_bob@bob.com\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"signers[Role2][name]\"\r\n\r\nSigner 2 Bob\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"signers[Role2][email_address]\"\r\n\r\nsigner2_bob@bob.com\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--");
-                Request request = new Request.Builder()
-                        .url("https://api.hellosign.com/v3/unclaimed_draft/create_embedded_with_template")
-                        .post(body)
-                        .addHeader("content-type", "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW")
-                        .addHeader("Cache-Control", "no-cache")
-                        .addHeader("Authorization", Credentials.basic(apikey, ""))
-                        .build();
+//                HttpResponse<String> response = Unirest.post("https://ff9e5cec91c827603d2669318a5432dbfa0268b04e0cb6ec34276da7c12f1246@api.hellosign.com/v3/unclaimed_draft/create_embedded_with_template")
+//                        .header("content-type", "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW")
+//                        .header("Cache-Control", "no-cache")
+//                        .body("------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"client_id\"\r\n\r\nd7219512693825facdd9241f458decf2\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"template_id\"\r\n\r\n4fbf53c4c064d5f3cd59c79a4fd8829c95e8f6ea\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"test_mode\"\r\n\r\n1\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"requester_email_address\"\r\n\r\nalex+postman@hellosign.com\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"is_for_embedded_signing\"\r\n\r\n1\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"signers[Role1][name]\"\r\n\r\nnameRole1\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"signers[Role1][email_address]\"\r\n\r\nalex+role1@hellosign.com\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: form-data; name=\"file[0]\"; filename=\"CreditAuth1.pdf\"\r\nContent-Type: application/pdf\r\n\r\n\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--")
+//                        .asString();
+            } else if (options.equals("20")) {
+                int i = 0;
+                while (true) { //just an always-true statement to keep the while loop running
+                    try {
+                        System.out.println("Starting loop. Enter ctrl+c to break.\n");
+                        TemplateSignatureRequest request = new TemplateSignatureRequest();
+                        request.setTemplateId("8b52650dbde7846df1287de6617803cca7eb6bde");
+                        request.setSubject("Purchase Order");
+                        request.setMessage("Glad we could come to an agreement.");
 
-                try (Response response = client.newCall(request).execute()) {
-                    String jsonData = response.body().string();
-                    System.out.print(jsonData + " is the whole response\n");
-                    JSONObject Jobject = new JSONObject(jsonData);
-                    String claim_url = Jobject.getJSONObject("unclaimed_draft").getString("claim_url");
-                    System.out.print(claim_url + " is the claim_url\n");
+//                        CustomField manager_name = new CustomField();
+//                        manager_name.setValue("Bob Bobson");
+//                        manager_name.setName("manager_name");
+//                        request.addCustomField(manager_name);
+//
+//                        CustomField customer_name = new CustomField();
+//                        customer_name.setValue("Frank Bobson");
+//                        customer_name.setName("customer_name");
+//                        request.addCustomField(customer_name);
+//
+//                        CustomField account_name = new CustomField();
+//                        account_name.setValue("Account Bobson");
+//                        account_name.setName("account_name");
+//                        request.addCustomField(account_name);
+//
+//                        CustomField street = new CustomField();
+//                        street.setValue("Account Bobson");
+//                        street.setName("street");
+//                        request.addCustomField(street);
+//
+//                        CustomField city = new CustomField();
+//                        city.setValue("City Bobson");
+//                        city.setName("city");
+//                        request.addCustomField(city);
+//
+//                        CustomField state = new CustomField();
+//                        state.setValue("State Bobson");
+//                        state.setName("state");
+//                        request.addCustomField(state);
+//
+//                        CustomField zip = new CustomField();
+//                        zip.setValue("zip Bobson");
+//                        zip.setName("zip");
+//                        request.addCustomField(zip);
+//
+//                        CustomField phone = new CustomField();
+//                        phone.setValue("phone Bobson");
+//                        phone.setName("phone");
+//                        request.addCustomField(phone);
+//
+//                        CustomField a1 = new CustomField();
+//                        a1.setValue("phone Bobson");
+//                        a1.setName("a1");
+//                        request.addCustomField(a1);
+//
+//                        CustomField a2 = new CustomField();
+//                        a2.setValue("phone Bobson");
+//                        a2.setName("a2");
+//                        request.addCustomField(a2);
+//
+//                        CustomField a3 = new CustomField();
+//                        a3.setValue("phone Bobson");
+//                        a3.setName("a3");
+//                        request.addCustomField(a3);
+//
+//                        CustomField a4 = new CustomField();
+//                        a4.setValue("phone Bobson");
+//                        a4.setName("a4");
+//                        request.addCustomField(a4);
+//
+//                        CustomField a5 = new CustomField();
+//                        a5.setValue("phone Bobson");
+//                        a5.setName("a5");
+//                        request.addCustomField(a5);
+//
+//                        CustomField a6 = new CustomField();
+//                        a6.setValue("phone Bobson");
+//                        a6.setName("a6");
+//                        request.addCustomField(a6);
+//
+//                        CustomField a7 = new CustomField();
+//                        a7.setValue("phone Bobson");
+//                        a7.setName("a7");
+//                        request.addCustomField(a7);
+//
+//                        CustomField chk = new CustomField();
+//                        chk.setValue("true");
+//                        chk.setName("chk");
+//                        request.addCustomField(chk);
+//
+//                        CustomField chk1 = new CustomField();
+//                        chk1.setValue("true");
+//                        chk1.setName("chk1");
+//                        request.addCustomField(chk1);
+//
+//                        CustomField chk2 = new CustomField();
+//                        chk2.setValue("true");
+//                        chk2.setName("chk2");
+//                        request.addCustomField(chk2);
+//
+//                        CustomField chk3 = new CustomField();
+//                        chk3.setValue("true");
+//                        chk3.setName("chk3");
+//                        request.addCustomField(chk3);
+
+                        request.setSigner("Role1", "frank@example.com", "Frank Franksonridge");
+                        request.setSigner("Role2", "bob@example.com", "Bob Johnson");
+                        request.setSigner("Role3", "Susan@example.com", "Susan Franksonridge");
+                        request.setSigner("Role4", "Barbara@example.com", "Barbara Franksonridge");
+                        
+//                        request.setTestMode(true);
+                        request.addMetadata("things", "rolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerole");
+                        request.addMetadata("lols", "rroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleroleole");
+                        request.addMetadata("things1", "rolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerole");
+                        request.addMetadata("lols1", "rolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerolerole");
+                        request.addMetadata("things2", "rolesdfsdf");
+                        request.addMetadata("lols2", "rosdfsdfasdflerolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdf");
+                        request.addMetadata("things3", "rofasdfsadflerolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdf");
+                        request.addMetadata("lols3", "rolerolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdf");
+                        request.addMetadata("things4", "rolerolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdf");
+                        request.addMetadata("lols4", "rolerolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolerolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolerolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdfrolesdfsdf");
+
+                        request.setRedirectUrl("https://google.com");
+
+                        EmbeddedRequest embedReq = new EmbeddedRequest(clientid, request);
+                        HelloSignClient client = new HelloSignClient(apikey);
+                        SignatureRequest newRequest = (SignatureRequest) client.createEmbeddedRequest(embedReq);
+                        //
+                        Signature sigidRole1 = newRequest.getSignature("frank@example.com", "Frank Franksonridge");
+                        String signID = sigidRole1.getId();
+                        System.out.print(signID + "\n");
+
+                        System.out.println("\nWaiting for 2 seconds to get the sign_url\n");
+                        TimeUnit.SECONDS.sleep(2);
+
+                        EmbeddedResponse embRequest = client.getEmbeddedSignUrl(signID);
+                        String signUrl = embRequest.getSignUrl();
+                        String url = "\nhttp://checkembedded.com/?sign_or_template_url=" + URLEncoder.encode(signUrl, "UTF-8") + "&client_id=" + clientid;
+                        System.out.println(signUrl + "\n");
+                        System.out.println(url + "\n");
+
+                        String id = newRequest.getId();
+                        System.out.print(id + " lol\n");
+                        System.out.print(newRequest + "\n");
+
+                        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+                        LocalDateTime now = LocalDateTime.now();
+                        System.out.println(dtf.format(now)); //2016/11/16 12:08:43
+
+                        i++;
+                        System.out.println(i + " is the number of times this has run");
+
+//                        System.out.println("\nWaiting for 2 seconds...\n");
+//                        TimeUnit.SECONDS.sleep(2);
+//                        System.out.println("\nWaiting for 5 minutes...\n");
+//                        TimeUnit.MINUTES.sleep(5);
+                    } catch (InterruptedException e) {
+                        System.out.println(e);
+                    }
+
                 }
 
             } else if (options.equals("0")) {
